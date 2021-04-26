@@ -3,7 +3,7 @@ package bonsen.nl.puzzled.service;
 import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
 import bonsen.nl.puzzled.model.Authority;
-import bonsen.nl.puzzled.model.User;
+import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.repository.UserRepository;
 import bonsen.nl.puzzled.utils.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;

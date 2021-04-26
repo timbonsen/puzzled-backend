@@ -1,7 +1,7 @@
 package bonsen.nl.puzzled.controller;
 
 import bonsen.nl.puzzled.exceptions.BadRequestException;
-import bonsen.nl.puzzled.model.User;
+import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +28,8 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
 
-    @PostMapping(value = "")
-    public ResponseEntity<Object> createKlant(@RequestBody User user) {
+    @PostMapping(value = "/register")
+    public ResponseEntity<Object> createUser(@RequestBody User user) {
         String newUsername = userService.createUser(user);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
@@ -39,13 +39,13 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}")
-    public ResponseEntity<Object> updateKlant(@PathVariable("username") String username, @RequestBody User user) {
+    public ResponseEntity<Object> updateUser(@PathVariable("username") String username, @RequestBody User user) {
         userService.updateUser(username, user);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{username}")
-    public ResponseEntity<Object> deleteKlant(@PathVariable("username") String username) {
+    public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }

@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.payload;
+package bonsen.nl.puzzled.payload.response;
 
 public class AuthenticationResponse {
 

@@ -1,4 +1,6 @@
-package bonsen.nl.puzzled.model;
+package bonsen.nl.puzzled.model.user;
+
+import bonsen.nl.puzzled.model.Authority;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,11 +14,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, length = 50)
+    @Column
     private String password;
 
-    @Column(nullable = false)
-    private boolean active = true;
+/*    @Column(nullable = false)
+    private boolean active = true;*/
 
     @Column
     private String apikey;
@@ -48,13 +50,13 @@ public class User {
         this.password = password;
     }
 
-    public boolean isActive() {
+/*    public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
-    }
+    }*/
 
     public String getApikey() {
         return apikey;
