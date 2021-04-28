@@ -1,9 +1,11 @@
 package bonsen.nl.puzzled.payload.request;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthenticationRequest {
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     private String username;
