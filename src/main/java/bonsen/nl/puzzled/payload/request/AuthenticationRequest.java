@@ -1,6 +1,10 @@
 package bonsen.nl.puzzled.payload.request;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 public class AuthenticationRequest {
+
+    private PasswordEncoder passwordEncoder;
 
     private String username;
     private String password;
@@ -9,7 +13,7 @@ public class AuthenticationRequest {
     }
     public AuthenticationRequest(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
     }
 
     public String getUsername() {
