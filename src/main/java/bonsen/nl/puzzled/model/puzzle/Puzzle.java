@@ -1,7 +1,13 @@
 package bonsen.nl.puzzled.model.puzzle;
 
+import bonsen.nl.puzzled.model.tags.Tags;
+import bonsen.nl.puzzled.model.user.User;
+
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
+
+import static java.util.UUID.randomUUID;
 
 @Entity
 @Table(name = "puzzles")
@@ -9,7 +15,7 @@ public class Puzzle {
 
     @Id
     @Column(nullable = false, unique = true)
-    private UUID id = UUID.randomUUID();
+    private UUID id = randomUUID();
 
     @Column(nullable = false)
     private String title;
@@ -32,11 +38,29 @@ public class Puzzle {
     @Column(nullable = false)
     private boolean reserved;
 
-    @Column(nullable = false)
-    private String mandatoryTag;
+    @OneToOne(
+            targetEntity = Tags.class,
+            mappedBy = "id",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Tags tags;
 
-    @Column(nullable = false)
-    private String owner;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "username")
+    private User owner;
+
+    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, Tags tags, User owner) {
+        this.title = title;
+        this.eanCode = eanCode;
+        this.numberOfPieces = numberOfPieces;
+        this.puzzleBrand = puzzleBrand;
+        this.width = width;
+        this.height = height;
+        this.reserved = reserved;
+        this.tags = tags;
+        this.owner = owner;
+    }
 
     public UUID getId() {
         return id;
@@ -45,7 +69,6 @@ public class Puzzle {
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -57,7 +80,6 @@ public class Puzzle {
     public int getNumberOfPieces() {
         return numberOfPieces;
     }
-
     public void setNumberOfPieces(int numberOfPieces) {
         this.numberOfPieces = numberOfPieces;
     }
@@ -65,7 +87,6 @@ public class Puzzle {
     public String getPuzzleBrand() {
         return puzzleBrand;
     }
-
     public void setPuzzleBrand(String puzzleBrand) {
         this.puzzleBrand = puzzleBrand;
     }
@@ -81,24 +102,21 @@ public class Puzzle {
     public boolean isReserved() {
         return reserved;
     }
-
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
     }
 
-    public String getMandatoryTag() {
-        return mandatoryTag;
+    public Tags getTags() {
+        return tags;
+    }
+    public void setTags(Tags tags) {
+        this.tags = tags;
     }
 
-    public void setMandatoryTag(String mandatoryTag) {
-        this.mandatoryTag = mandatoryTag;
-    }
-
-    public String getOwner() {
+    public User getOwner() {
         return owner;
     }
-
-    public void setOwner(String owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 }

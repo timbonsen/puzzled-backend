@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.model;
+package bonsen.nl.puzzled.model.authority;
 
 import java.io.Serializable;
 

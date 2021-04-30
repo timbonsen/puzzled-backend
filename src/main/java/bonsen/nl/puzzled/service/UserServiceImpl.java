@@ -2,10 +2,9 @@ package bonsen.nl.puzzled.service;
 
 import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
-import bonsen.nl.puzzled.model.Authority;
+import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.repository.UserRepository;
-import bonsen.nl.puzzled.utils.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +17,6 @@ public class UserServiceImpl implements bonsen.nl.puzzled.service.UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-//    @Autowired
-//    private AuthorityRepository authorityRepository;
 
     @Override
     public Collection<User> getUsers() {
@@ -39,8 +35,6 @@ public class UserServiceImpl implements bonsen.nl.puzzled.service.UserService {
 
     @Override
     public String createUser(User user) {
-        String randomString = RandomStringGenerator.generateAlphaNumeric(20);
-        user.setApikey(randomString);
         User newUser = userRepository.save(user);
         return newUser.getUsername();
     }
@@ -55,6 +49,10 @@ public class UserServiceImpl implements bonsen.nl.puzzled.service.UserService {
         if (!userRepository.existsById(username)) throw new RecordNotFoundException();
         User user = userRepository.findById(username).get();
         user.setPassword(newUser.getPassword());
+        user.setEmailAddress(newUser.getEmailAddress());
+        user.setFirstName(newUser.getFirstName());
+        user.setLastName(newUser.getLastName());
+        user.setAddress(newUser.getAddress());
         userRepository.save(user);
     }
 
@@ -81,5 +79,4 @@ public class UserServiceImpl implements bonsen.nl.puzzled.service.UserService {
         user.removeAuthority(authorityToRemove);
         userRepository.save(user);
     }
-
 }

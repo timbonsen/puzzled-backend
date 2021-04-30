@@ -1,6 +1,6 @@
 package bonsen.nl.puzzled.service;
 
-import bonsen.nl.puzzled.model.Authority;
+import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.user.User;
 
 import java.util.Collection;

@@ -1,6 +1,8 @@
 package bonsen.nl.puzzled.model.user;
 
-import bonsen.nl.puzzled.model.Authority;
+import bonsen.nl.puzzled.model.address.Address;
+import bonsen.nl.puzzled.model.authority.Authority;
+import bonsen.nl.puzzled.model.puzzle.Puzzle;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,61 +19,85 @@ public class User {
     @Column
     private String password;
 
-/*    @Column(nullable = false)
-    private boolean active = true;*/
-
-    @Column
-    private String apikey;
-
     @Column
     private String emailAddress;
 
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
+    @OneToOne(
+            targetEntity = Address.class,
+            mappedBy = "id",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Address address;
+
     @OneToMany(
-            targetEntity = bonsen.nl.puzzled.model.Authority.class,
+            targetEntity = Authority.class,
             mappedBy = "username",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
-    private Set<bonsen.nl.puzzled.model.Authority> authorities = new HashSet<>();
+    private Set<Authority> authorities = new HashSet<>();
+
+    @OneToMany(
+            targetEntity = Puzzle.class,
+            mappedBy = "id",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Set<Puzzle> puzzles = new HashSet<>();
+
+    public User(String username, String password, String emailAddress, String firstName, String lastName, Address address) {
+        this.username = username;
+        this.password = password;
+        this.emailAddress = emailAddress;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+    }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-/*    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }*/
-
-    public String getApikey() {
-        return apikey;
-    }
-
-    public void setApikey(String apikey) {
-        this.apikey = apikey;
     }
 
     public String getEmailAddress() {
         return emailAddress;
     }
-
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public Set<Authority> getAuthorities() { return authorities; }
@@ -80,5 +106,15 @@ public class User {
     }
     public void removeAuthority(Authority authority) {
         this.authorities.remove(authority);
+    }
+
+    public Set<Puzzle> getPuzzles() {
+        return puzzles;
+    }
+    public void addPuzzle(Puzzle puzzle) {
+        this.puzzles.add(puzzle);
+    }
+    public void removePuzzle(Puzzle puzzle) {
+        this.puzzles.remove(puzzle);
     }
 }

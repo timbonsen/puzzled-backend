@@ -1,10 +1,10 @@
-package bonsen.nl.puzzled.model;
+package bonsen.nl.puzzled.model.authority;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@IdClass(bonsen.nl.puzzled.model.AuthorityKey.class)
+@IdClass(AuthorityKey.class)
 @Table(name = "authorities")
 public class Authority implements Serializable {
 
