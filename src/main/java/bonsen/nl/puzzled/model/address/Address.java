@@ -36,7 +36,7 @@ public class Address {
     }
 
     public Address() {
-        
+
     }
 
     public String getId() {
