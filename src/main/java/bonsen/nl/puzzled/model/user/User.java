@@ -59,6 +59,12 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        Authority authority = new Authority(username,"ROLE_USER");
+        authorities.add(authority);
+    }
+
+    public User() {
+        
     }
 
     public String getUsername() {
@@ -91,6 +97,10 @@ public class User {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
     }
 
     public Address getAddress() {

@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.model.tags;
+package bonsen.nl.puzzled.model.puzzleTags;
 
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 
@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tags")
-public class Tags {
+@Table(name = "puzzleTags")
+public class PuzzleTags {
 
     @Id
     @Column
@@ -30,11 +30,15 @@ public class Tags {
             fetch = FetchType.EAGER)
     private Puzzle puzzle;
 
-    public Tags(String tag1, String tag2, String tag3, Puzzle puzzle) {
+    public PuzzleTags(String tag1, String tag2, String tag3, Puzzle puzzle) {
         this.tag1 = tag1;
         this.tag2 = tag2;
         this.tag3 = tag3;
         this.puzzle = puzzle;
+    }
+
+    public PuzzleTags() {
+
     }
 
     public String getTag1() {
@@ -60,8 +64,5 @@ public class Tags {
 
     public Puzzle getPuzzle() {
         return puzzle;
-    }
-    public void setPuzzle(Puzzle puzzle) {
-        this.puzzle = puzzle;
     }
 }

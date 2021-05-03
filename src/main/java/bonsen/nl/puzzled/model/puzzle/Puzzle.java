@@ -1,10 +1,9 @@
 package bonsen.nl.puzzled.model.puzzle;
 
-import bonsen.nl.puzzled.model.tags.Tags;
+import bonsen.nl.puzzled.model.puzzleTags.PuzzleTags;
 import bonsen.nl.puzzled.model.user.User;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
@@ -39,18 +38,18 @@ public class Puzzle {
     private boolean reserved;
 
     @OneToOne(
-            targetEntity = Tags.class,
+            targetEntity = PuzzleTags.class,
             mappedBy = "id",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
-    private Tags tags;
+    private PuzzleTags puzzleTags;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private User owner;
 
-    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, Tags tags, User owner) {
+    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, User owner) {
         this.title = title;
         this.eanCode = eanCode;
         this.numberOfPieces = numberOfPieces;
@@ -58,8 +57,11 @@ public class Puzzle {
         this.width = width;
         this.height = height;
         this.reserved = reserved;
-        this.tags = tags;
         this.owner = owner;
+    }
+
+    public Puzzle() {
+
     }
 
     public UUID getId() {
@@ -106,11 +108,11 @@ public class Puzzle {
         this.reserved = reserved;
     }
 
-    public Tags getTags() {
-        return tags;
+    public PuzzleTags getTags() {
+        return puzzleTags;
     }
-    public void setTags(Tags tags) {
-        this.tags = tags;
+    public void setTags(PuzzleTags puzzleTags) {
+        this.puzzleTags = puzzleTags;
     }
 
     public User getOwner() {
