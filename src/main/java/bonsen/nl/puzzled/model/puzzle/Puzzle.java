@@ -1,10 +1,8 @@
 package bonsen.nl.puzzled.model.puzzle;
 
-import bonsen.nl.puzzled.model.puzzleTags.PuzzleTags;
 import bonsen.nl.puzzled.model.user.User;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
@@ -14,7 +12,7 @@ public class Puzzle {
 
     @Id
     @Column(nullable = false, unique = true)
-    private UUID id = randomUUID();
+    private String id = randomUUID().toString();
 
     @Column(nullable = false)
     private String title;
@@ -37,19 +35,20 @@ public class Puzzle {
     @Column(nullable = false)
     private boolean reserved;
 
-    @OneToOne(
-            targetEntity = PuzzleTags.class,
-            mappedBy = "id",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    private PuzzleTags puzzleTags;
+    @Column(nullable = false)
+    private String tag1;
+
+    @Column
+    private String tag2;
+
+    @Column
+    private String tag3;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private User owner;
 
-    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, User owner) {
+    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3, User owner) {
         this.title = title;
         this.eanCode = eanCode;
         this.numberOfPieces = numberOfPieces;
@@ -57,6 +56,9 @@ public class Puzzle {
         this.width = width;
         this.height = height;
         this.reserved = reserved;
+        this.tag1 = tag1;
+        this.tag2 = tag2;
+        this.tag3 = tag3;
         this.owner = owner;
     }
 
@@ -64,7 +66,7 @@ public class Puzzle {
 
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -108,11 +110,25 @@ public class Puzzle {
         this.reserved = reserved;
     }
 
-    public PuzzleTags getTags() {
-        return puzzleTags;
+    public String getTag1() {
+        return tag1;
     }
-    public void setTags(PuzzleTags puzzleTags) {
-        this.puzzleTags = puzzleTags;
+    public void setTag1(String tag1) {
+        this.tag1 = tag1;
+    }
+
+    public String getTag2() {
+        return tag2;
+    }
+    public void setTag2(String tag2) {
+        this.tag2 = tag2;
+    }
+
+    public String getTag3() {
+        return tag3;
+    }
+    public void setTag3(String tag3) {
+        this.tag3 = tag3;
     }
 
     public User getOwner() {

@@ -1,7 +1,6 @@
 package bonsen.nl.puzzled.model.address;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
@@ -11,7 +10,7 @@ public class Address {
 
     @Id
     @Column(nullable = false)
-    private UUID id = randomUUID();
+    private String id = randomUUID().toString();
 
     @Column(nullable = false)
     private String streetName;
@@ -36,7 +35,11 @@ public class Address {
         this.country = country;
     }
 
-    public UUID getId() {
+    public Address() {
+        
+    }
+
+    public String getId() {
         return id;
     }
 

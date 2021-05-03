@@ -16,12 +16,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.sql.DataSource;
-
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
 
     @Autowired
     public CustomUserDetailsService customUserDetailsService;
@@ -50,6 +52,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //JWT token authentication
         http
+                .cors().disable()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/users/**").hasRole("USER")

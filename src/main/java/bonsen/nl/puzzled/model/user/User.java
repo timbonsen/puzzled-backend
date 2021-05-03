@@ -30,10 +30,10 @@ public class User {
 
     @OneToOne(
             targetEntity = Address.class,
-            mappedBy = "id",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
     private Address address;
 
     @OneToMany(

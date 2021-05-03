@@ -1,8 +1,6 @@
 package bonsen.nl.puzzled.model.puzzle;
 
-import bonsen.nl.puzzled.exceptions.AtLeastOneTagException;
 import bonsen.nl.puzzled.exceptions.EmptyFieldException;
-import bonsen.nl.puzzled.model.puzzleTags.PuzzleTags;
 import bonsen.nl.puzzled.model.user.User;
 
 public class PuzzleBuilder {
@@ -14,7 +12,9 @@ public class PuzzleBuilder {
     private double width;
     private double height;
     private boolean reserved;
-    private PuzzleTags puzzleTags;
+    private String tag1;
+    private String tag2;
+    private String tag3;
     private User owner;
 
     public PuzzleBuilder() {
@@ -49,8 +49,16 @@ public class PuzzleBuilder {
         this.reserved = reserved;
         return this;
     }
-    public PuzzleBuilder withTags(PuzzleTags puzzleTags) {
-        this.puzzleTags = puzzleTags;
+    public PuzzleBuilder withTag1(String tag1) {
+        this.tag1 = tag1;
+        return this;
+    }
+    public PuzzleBuilder withTag2(String tag2) {
+        this.tag2 = tag2;
+        return this;
+    }
+    public PuzzleBuilder withTag3(String tag3) {
+        this.tag3 = tag3;
         return this;
     }
     public PuzzleBuilder withOwner(User owner) {
@@ -63,9 +71,7 @@ public class PuzzleBuilder {
             throw new EmptyFieldException();
         } else if (eanCode.equals("")) {
             throw new EmptyFieldException();
-        } else if (puzzleTags.equals(null)) {
-            throw new AtLeastOneTagException();
         }
-        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, owner);
+        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, tag1, tag2, tag3, owner);
     }
 }

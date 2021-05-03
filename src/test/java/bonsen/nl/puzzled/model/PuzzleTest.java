@@ -2,7 +2,6 @@ package bonsen.nl.puzzled.model;
 
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
-import bonsen.nl.puzzled.model.puzzleTags.PuzzleTags;
 import bonsen.nl.puzzled.model.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PuzzleTest {
 
-    private PuzzleTags puzzleTags;
     private Puzzle puzzle;
     private User ownerA;
     private User ownerB;
@@ -22,9 +20,7 @@ public class PuzzleTest {
         this.address = new Address("Pandastraat", "19", "1234AB", "Pandastad", "Pandaland");
         this.ownerA = new User("user", "password", "user@puzzled.nl", "User", "Userson", address);
         this.ownerB = new User("henk", "password", "henk@puzzled.nl", "Henk", "Kramer", address);
-        this.puzzle = new Puzzle("Pinnokio's Dream", "87 10400 31114 0", 500, "Disney", 12.5, 10.1, false, ownerA);
-        this.puzzleTags = new PuzzleTags("Disney", "Nature", "Architecture", puzzle);
-        this.puzzle.setTags(puzzleTags);
+        this.puzzle = new Puzzle("Pinnokio's Dream", "87 10400 31114 0", 500, "Disney", 12.5, 10.1, false, "Disney", "Nature", "Architecture", ownerA);
     }
 
     @Test
@@ -82,13 +78,6 @@ public class PuzzleTest {
     }
 
     @Test
-    void testGetTags() {
-        Object expectedTags = this.puzzleTags;
-        Object actualTags = this.puzzle.getTags();
-        assertEquals(expectedTags, actualTags);
-    }
-
-    @Test
     void testGetOwner() {
         Object expectedOwner = this.ownerA;
         Object actualOwner = this.puzzle.getOwner();
@@ -123,14 +112,6 @@ public class PuzzleTest {
     void testSetReserved() {
         this.puzzle.setReserved(true);
         assertTrue(this.puzzle.isReserved());
-    }
-
-    @Test
-    void testSetTags() {
-        PuzzleTags expectedPuzzleTags = new PuzzleTags("Marvel", "JvHaasteren", "Wasgij", puzzle);
-        this.puzzle.setTags(expectedPuzzleTags);
-        PuzzleTags actualPuzzleTags = this.puzzle.getTags();
-        assertEquals(expectedPuzzleTags, actualPuzzleTags);
     }
 
     @Test
