@@ -19,21 +19,17 @@ public class User {
     @Column
     private String password;
 
-    @Column
+    @Column(name = "emailaddress")
     private String emailAddress;
 
-    @Column
+    @Column(name = "firstname")
     private String firstName;
 
-    @Column
+    @Column(name = "lastname")
     private String lastName;
 
-    @OneToOne(
-            targetEntity = Address.class,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    @JoinColumn(name = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     @OneToMany(
@@ -106,7 +102,7 @@ public class User {
     public Address getAddress() {
         return address;
     }
-    public void setAddress(Address address) {
+    public void addAddress(Address address) {
         this.address = address;
     }
 

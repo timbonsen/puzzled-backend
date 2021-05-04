@@ -11,6 +11,7 @@ public class ImageUploadController {
 
     private static final String storageLocation = "D:/Werk/NOVI/Eindopdracht/PuzzleImages";
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/file-upload", method = RequestMethod.POST)
 
     @ResponseBody

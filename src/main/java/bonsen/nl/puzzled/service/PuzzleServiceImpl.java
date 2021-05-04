@@ -19,12 +19,12 @@ public class PuzzleServiceImpl implements bonsen.nl.puzzled.service.PuzzleServic
     }
 
     @Override
-    public void updatePuzzle(UUID id, Puzzle puzzle) {
+    public void updatePuzzle(String id, Puzzle puzzle) {
 
     }
 
     @Override
-    public void deletePuzzle(UUID id) {
+    public void deletePuzzle(String id) {
 
     }
 
@@ -34,12 +34,12 @@ public class PuzzleServiceImpl implements bonsen.nl.puzzled.service.PuzzleServic
     }
 
     @Override
-    public Optional<Puzzle> getPuzzle(UUID id) {
+    public Optional<Puzzle> getPuzzle(String id) {
         return puzzleRepository.findById(id);
     }
 
     @Override
-    public boolean puzzleExists(UUID id) {
+    public boolean puzzleExists(String id) {
         return false;
     }
 }

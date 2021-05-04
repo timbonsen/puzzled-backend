@@ -121,7 +121,7 @@ public class UserTest {
     void testSetAddress() {
         String expectedAddressStreetName = "Berenstraat";
         Address newAddress = new Address("Berenstraat", "19","1234AC","Berenstad", "Berenland");
-        this.user.setAddress(newAddress);
+        this.user.addAddress(newAddress);
         String actualAddressStreetName = this.user.getAddress().getStreetName();
         assertEquals(expectedAddressStreetName, actualAddressStreetName);
     }

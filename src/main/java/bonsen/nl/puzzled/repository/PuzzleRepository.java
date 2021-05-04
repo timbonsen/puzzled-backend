@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface PuzzleRepository extends JpaRepository<Puzzle, UUID> {
+public interface PuzzleRepository extends JpaRepository<Puzzle, String> {
 
 /*    List<Puzzle> findAllByCategory(String category);
     List<Puzzle> findAllByEanCode(String eanCode);

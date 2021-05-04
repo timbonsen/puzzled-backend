@@ -12,19 +12,19 @@ public class Address {
     @Column(nullable = false)
     private String id = randomUUID().toString();
 
-    @Column(nullable = false)
+    @Column(name = "streetname", nullable = false)
     private String streetName;
 
-    @Column(nullable = false)
+    @Column(name = "housenumber", nullable = false)
     private String houseNumber;
 
-    @Column(nullable = false)
+    @Column(name = "postalcode", nullable = false)
     private String postalCode;
 
-    @Column(nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(nullable = false)
+    @Column(name = "country", nullable = false)
     private String country;
 
     public Address(String streetName, String houseNumber, String postalCode, String city, String country) {

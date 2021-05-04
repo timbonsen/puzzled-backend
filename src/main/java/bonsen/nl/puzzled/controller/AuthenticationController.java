@@ -27,11 +27,13 @@ public class AuthenticationController {
     @Autowired
     JwtUtil jwtUtl;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(value = "/authenticated")
     public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
         return ResponseEntity.ok().body(principal);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 

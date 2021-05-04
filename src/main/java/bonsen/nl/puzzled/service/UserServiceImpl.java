@@ -2,8 +2,10 @@ package bonsen.nl.puzzled.service;
 
 import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
+import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.user.User;
+import bonsen.nl.puzzled.repository.AddressRepository;
 import bonsen.nl.puzzled.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,13 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements bonsen.nl.puzzled.service.UserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Override
     public Collection<User> getUsers() {
@@ -52,7 +57,7 @@ public class UserServiceImpl implements bonsen.nl.puzzled.service.UserService {
         user.setEmailAddress(newUser.getEmailAddress());
         user.setFirstName(newUser.getFirstName());
         user.setLastName(newUser.getLastName());
-        user.setAddress(newUser.getAddress());
+        user.addAddress(newUser.getAddress());
         userRepository.save(user);
     }
 
@@ -77,6 +82,19 @@ public class UserServiceImpl implements bonsen.nl.puzzled.service.UserService {
         User user = userRepository.findById(username).get();
         Authority authorityToRemove = user.getAuthorities().stream().filter((a) -> a.getAuthority().equalsIgnoreCase(authority)).findAny().get();
         user.removeAuthority(authorityToRemove);
+        userRepository.save(user);
+    }
+
+    @Override
+    public Optional<Address> getAddress(String id) {
+        return addressRepository.findById(id);
+    }
+
+    @Override
+    public void addAddress(String username, Address address) {
+        if (!userRepository.existsById(username)) throw new UsernameNotFoundException(username);
+        User user = userRepository.findById(username).get();
+        user.addAddress(address);
         userRepository.save(user);
     }
 }

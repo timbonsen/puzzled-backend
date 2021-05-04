@@ -1,5 +1,6 @@
 package bonsen.nl.puzzled.service;
 
+import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.user.User;
 
@@ -18,5 +19,6 @@ public interface UserService {
     public abstract Set<Authority> getAuthorities(String username);
     public abstract void addAuthority(String username, String authority);
     public abstract void removeAuthority(String username, String authority);
-
+    public abstract Optional<Address> getAddress(String id);
+    public abstract void addAddress(String username, Address address);
 }
