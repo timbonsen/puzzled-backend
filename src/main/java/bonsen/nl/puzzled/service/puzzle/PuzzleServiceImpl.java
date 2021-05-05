@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.service;
+package bonsen.nl.puzzled.service.puzzle;
 
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.repository.PuzzleRepository;
@@ -6,10 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
-public class PuzzleServiceImpl implements bonsen.nl.puzzled.service.PuzzleService {
+public class PuzzleServiceImpl implements PuzzleService {
 
     private PuzzleRepository puzzleRepository;
 

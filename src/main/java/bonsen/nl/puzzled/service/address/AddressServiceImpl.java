@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.service;
+package bonsen.nl.puzzled.service.address;
 
 import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.model.address.Address;
@@ -14,8 +14,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public String createAddress(Address address) {
-        Address newAddress = addressRepository.save(address);
-        return newAddress.getId();
+        addressRepository.save(address);
+        return address.getId();
     }
 
     @Override

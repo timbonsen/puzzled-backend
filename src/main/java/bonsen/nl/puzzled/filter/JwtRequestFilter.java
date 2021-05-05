@@ -1,6 +1,6 @@
 package bonsen.nl.puzzled.filter;
 
-import bonsen.nl.puzzled.service.CustomUserDetailsService;
+import bonsen.nl.puzzled.service.user.CustomUserDetailsService;
 import bonsen.nl.puzzled.utils.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;

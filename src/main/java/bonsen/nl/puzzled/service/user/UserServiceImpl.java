@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.service;
+package bonsen.nl.puzzled.service.user;
 
 import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;

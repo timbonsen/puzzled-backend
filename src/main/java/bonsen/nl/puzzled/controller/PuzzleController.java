@@ -1,14 +1,13 @@
 package bonsen.nl.puzzled.controller;
 
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
-import bonsen.nl.puzzled.service.PuzzleService;
+import bonsen.nl.puzzled.service.puzzle.PuzzleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/puzzles")

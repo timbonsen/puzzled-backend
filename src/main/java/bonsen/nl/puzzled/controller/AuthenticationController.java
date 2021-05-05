@@ -2,7 +2,7 @@ package bonsen.nl.puzzled.controller;
 
 import bonsen.nl.puzzled.payload.request.AuthenticationRequest;
 import bonsen.nl.puzzled.payload.response.AuthenticationResponse;
-import bonsen.nl.puzzled.service.CustomUserDetailsService;
+import bonsen.nl.puzzled.service.user.CustomUserDetailsService;
 import bonsen.nl.puzzled.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

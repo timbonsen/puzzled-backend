@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.service;
+package bonsen.nl.puzzled.service.address;
 
 import bonsen.nl.puzzled.model.address.Address;
 

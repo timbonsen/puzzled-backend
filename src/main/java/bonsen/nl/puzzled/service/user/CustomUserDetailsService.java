@@ -1,4 +1,4 @@
-package bonsen.nl.puzzled.service;
+package bonsen.nl.puzzled.service.user;
 
 import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.user.User;
