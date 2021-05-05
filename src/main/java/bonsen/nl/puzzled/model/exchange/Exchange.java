@@ -27,6 +27,12 @@ public class Exchange {
     @JoinColumn(name = "user2", referencedColumnName = "username")
     private User userTwo;
 
+    @Column
+    private boolean UserOneHasAccepted = false;
+
+    @Column
+    private boolean UserTwoHasAccepted = false;
+
     @OneToMany(
             targetEntity = Puzzle.class,
             mappedBy = "id",
@@ -62,6 +68,20 @@ public class Exchange {
 
     public User getUserTwo() {
         return userTwo;
+    }
+
+    public boolean getUserOneHasAccepted() {
+        return UserOneHasAccepted;
+    }
+    public void setUserOneHasAccepted(boolean userOneHasAccepted) {
+        UserOneHasAccepted = userOneHasAccepted;
+    }
+
+    public boolean getUserTwoHasAccepted() {
+        return UserTwoHasAccepted;
+    }
+    public void setUserTwoHasAccepted(boolean userTwoHasAccepted) {
+        UserTwoHasAccepted = userTwoHasAccepted;
     }
 
     public Set<Puzzle> getPuzzlesUserOne() {
