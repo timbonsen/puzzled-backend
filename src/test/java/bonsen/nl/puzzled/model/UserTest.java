@@ -40,28 +40,28 @@ public class UserTest {
     @Test
     void testGetEmailAddress() {
         String expectedEmailAddress = "user@puzzled.nl";
-        String actualEmailAddress = this.user.getEmailAddress();
+        String actualEmailAddress = this.user.getEmail();
         assertEquals(expectedEmailAddress, actualEmailAddress);
     }
 
     @Test
     void testGetFirstName() {
         String expectedFirstName = "User";
-        String actualFirstName = this.user.getFirstName();
+        String actualFirstName = this.user.getFirstname();
         assertEquals(expectedFirstName, actualFirstName);
     }
 
     @Test
     void testGetLastName() {
         String expectedLastName = "Userson";
-        String actualLastName = this.user.getLastName();
+        String actualLastName = this.user.getLastname();
         assertEquals(expectedLastName, actualLastName);
     }
 
     @Test
     void testGetFullName() {
         String expectedFullName = "User Userson";
-        String actualFullName = this.user.getFullName();
+        String actualFullName = this.user.getFullname();
         assertEquals(expectedFullName, actualFullName);
     }
 
@@ -96,24 +96,24 @@ public class UserTest {
     @Test
     void testSetEmailAddress() {
         String expectedEmailAddress = "user@puzzled.nl";
-        this.user.setEmailAddress("user@puzzled.nl");
-        String actualEmailAddress = this.user.getEmailAddress();
+        this.user.setEmail("user@puzzled.nl");
+        String actualEmailAddress = this.user.getEmail();
         assertEquals(expectedEmailAddress, actualEmailAddress);
     }
 
     @Test
     void testSetFirstName() {
         String expectedFirstName = "Evert";
-        this.user.setFirstName("Evert");
-        String actualFirstName = this.user.getFirstName();
+        this.user.setFirstname("Evert");
+        String actualFirstName = this.user.getFirstname();
         assertEquals(expectedFirstName, actualFirstName);
     }
 
     @Test
     void testSetLastName() {
         String expectedLastName = "Userszoon";
-        this.user.setLastName("Userszoon");
-        String actualLastName = this.user.getLastName();
+        this.user.setLastname("Userszoon");
+        String actualLastName = this.user.getLastname();
         assertEquals(expectedLastName, actualLastName);
     }
 

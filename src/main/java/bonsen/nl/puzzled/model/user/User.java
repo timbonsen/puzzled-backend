@@ -19,14 +19,14 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, name = "emailaddress")
-    private String emailAddress;
+    @Column(nullable = false, name = "email")
+    private String email;
 
     @Column(name = "firstname")
-    private String firstName;
+    private String firstname;
 
     @Column(name = "lastname")
-    private String lastName;
+    private String lastname;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
@@ -48,15 +48,13 @@ public class User {
             fetch = FetchType.EAGER)
     private Set<Puzzle> puzzles = new HashSet<>();
 
-    public User(String username, String password, String emailAddress, String firstName, String lastName, Address address) {
+    public User(String username, String password, String email, String firstname, String lastname, Address address) {
         this.username = username;
         this.password = password;
-        this.emailAddress = emailAddress;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.email = email;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.address = address;
-        Authority authority = new Authority(username,"ROLE_USER");
-        authorities.add(authority);
     }
 
     public User() {
@@ -74,29 +72,29 @@ public class User {
         this.password = password;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getFirstname() {
+        return firstname;
     }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
+    public String getLastname() {
+        return lastname;
+    }
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getFullname() {
+        return this.firstname + " " + this.lastname;
     }
 
     public Address getAddress() {

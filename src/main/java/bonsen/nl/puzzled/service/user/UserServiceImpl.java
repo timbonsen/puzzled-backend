@@ -6,8 +6,10 @@ import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.repository.AddressRepository;
+import bonsen.nl.puzzled.repository.AuthorityRepository;
 import bonsen.nl.puzzled.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -22,6 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     @Override
     public Collection<User> getUsers() {
@@ -40,7 +48,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String createUser(User user) {
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+        Authority newAuthority = new Authority(user.getUsername(), "ROLE_USER");
+        user.addAuthority(newAuthority);
         User newUser = userRepository.save(user);
+        Set<Authority> authorities = newUser.getAuthorities();
+        for (Authority authority: authorities) {
+            authorityRepository.save(authority);
+        }
         return newUser.getUsername();
     }
 
@@ -54,9 +70,9 @@ public class UserServiceImpl implements UserService {
         if (!userRepository.existsById(username)) throw new RecordNotFoundException();
         User user = userRepository.findById(username).get();
         user.setPassword(newUser.getPassword());
-        user.setEmailAddress(newUser.getEmailAddress());
-        user.setFirstName(newUser.getFirstName());
-        user.setLastName(newUser.getLastName());
+        user.setEmail(newUser.getEmail());
+        user.setFirstname(newUser.getFirstname());
+        user.setLastname(newUser.getLastname());
         user.addAddress(newUser.getAddress());
         userRepository.save(user);
     }

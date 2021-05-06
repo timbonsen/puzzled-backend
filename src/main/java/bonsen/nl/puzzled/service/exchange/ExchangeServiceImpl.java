@@ -12,6 +12,11 @@ public class ExchangeServiceImpl implements ExchangeService {
     private ExchangeRepository exchangeRepository;
 
     @Override
+    public Exchange getExchange(String id) {
+        return null;
+    }
+
+    @Override
     public String createExchange(Exchange exchange) {
         exchangeRepository.save(exchange);
         return exchange.getId();

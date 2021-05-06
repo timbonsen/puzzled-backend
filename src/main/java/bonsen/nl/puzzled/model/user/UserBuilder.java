@@ -7,7 +7,7 @@ public class UserBuilder {
 
     private String username;
     private String password;
-    private String emailAddress;
+    private String email;
     private String firstName;
     private String lastName;
     private Address address;
@@ -23,8 +23,8 @@ public class UserBuilder {
         this.password = password;
         return this;
     }
-    public UserBuilder withEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public UserBuilder withEmailAddress(String email) {
+        this.email = email;
         return this;
     }
     public UserBuilder withFirstName(String firstName) {
@@ -45,9 +45,9 @@ public class UserBuilder {
             throw new EmptyFieldException();
         } else if (password.equals("")) {
             throw new EmptyFieldException();
-        } else if (emailAddress.equals("")) {
+        } else if (email.equals("")) {
             throw new EmptyFieldException();
         }
-        return new User(username, password, emailAddress, firstName, lastName, address);
+        return new User(username, password, email, firstName, lastName, address);
     }
 }
