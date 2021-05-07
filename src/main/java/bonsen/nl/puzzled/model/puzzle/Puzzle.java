@@ -4,6 +4,8 @@ import bonsen.nl.puzzled.model.user.User;
 
 import javax.persistence.*;
 
+import java.util.Optional;
+
 import static java.util.UUID.randomUUID;
 
 @Entity
@@ -43,6 +45,9 @@ public class Puzzle {
 
     @Column
     private String tag3;
+
+    @Column
+    private String imageFileName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
@@ -108,6 +113,13 @@ public class Puzzle {
     }
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
     }
 
     public String getTag1() {

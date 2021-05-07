@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PuzzleService {
-    public abstract String createPuzzle(Puzzle puzzle);
+    public abstract String createPuzzle(Puzzle puzzle, String fileName, String username);
     public abstract void updatePuzzle(String id, Puzzle puzzle);
     public abstract void deletePuzzle(String id);
     public abstract Collection<Puzzle> getPuzzles();

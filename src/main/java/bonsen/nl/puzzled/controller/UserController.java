@@ -52,26 +52,8 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getAuthorities(username));
     }
 
-    @PostMapping(value = "/{username}/authorities")
-    public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
-        try {
-            String authorityName = (String) fields.get("authority");
-            userService.addAuthority(username, authorityName);
-            return ResponseEntity.noContent().build();
-        }
-        catch (Exception ex) {
-            throw new BadRequestException();
-        }
-    }
-
-    @DeleteMapping(value = "/{username}/authorities/{authority}")
-    public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
-        userService.removeAuthority(username, authority);
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping(value = "/{username}/address")
-    public ResponseEntity<Object> createAddress(@RequestBody String username, Address address) {
+    public ResponseEntity<Object> createAddress(@PathVariable("username") String username, @RequestBody Address address) {
         addressService.createAddress(address);
         userService.addAddress(username, address);
         return ResponseEntity.noContent().build();
