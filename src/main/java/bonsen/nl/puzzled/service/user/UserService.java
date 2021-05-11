@@ -14,7 +14,7 @@ public interface UserService {
     public abstract void updateUser(String username, User user);
     public abstract void deleteUser(String username);
     public abstract Collection<User> getUsers();
-    public abstract Optional<User> getUser(String username);
+    public abstract User getUser(String username);
     public abstract boolean userExists(String username);
     public abstract Set<Authority> getAuthorities(String username);
     public abstract void addAuthority(String username, String authority);

@@ -91,13 +91,6 @@ public class AuthenticationController {
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping(value = "/{username}/address")
-    public ResponseEntity<Object> createAddress(@PathVariable("username") String username, @RequestBody Address address) {
-        addressService.createAddress(address);
-        userService.addAddress(username, address);
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping(value = "/{username}/upload")
     public ResponseEntity<Object> createPuzzle(
             @PathVariable("username") String username,

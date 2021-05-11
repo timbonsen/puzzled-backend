@@ -26,7 +26,7 @@ public class PuzzleServiceImpl implements PuzzleService {
     public String createPuzzle(Puzzle puzzle, String fileName, String username) {
         Puzzle newPuzzle = puzzleRepository.save(puzzle);
         newPuzzle.setImageFileName(fileName);
-        User owner = userRepository.findById(username);
+        User owner = userRepository.findByUsername(username);
         newPuzzle.setOwner(owner);
 
         return newPuzzle.getId();
