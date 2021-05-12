@@ -4,9 +4,11 @@ import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
+import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.repository.AddressRepository;
 import bonsen.nl.puzzled.repository.AuthorityRepository;
+import bonsen.nl.puzzled.repository.PuzzleRepository;
 import bonsen.nl.puzzled.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private PuzzleRepository puzzleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -112,5 +117,26 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(username).get();
         user.addAddress(address);
         userRepository.save(user);
+    }
+
+    @Override
+    public Set<Puzzle> getPuzzles(String username) {
+        User user = userRepository.findById(username).get();
+        return user.getPuzzles();
+    }
+
+    @Override
+    public void addPuzzle(String username, Puzzle puzzle) {
+        if (!userRepository.existsById(username)) throw new UsernameNotFoundException(username);
+        User user = userRepository.findById(username).get();
+        user.addPuzzle(puzzle);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void removePuzzle(String username, String puzzleId) {
+        User user = userRepository.findById(username).get();
+        Optional<Puzzle> puzzle = puzzleRepository.findById(puzzleId);
+        user.removePuzzle(puzzle);
     }
 }

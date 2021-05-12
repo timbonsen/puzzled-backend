@@ -31,8 +31,6 @@ import java.security.Principal;
 @CrossOrigin(origins = "http://localhost:3000",maxAge = 3600)
 public class AuthenticationController {
 
-    private static final String storageLocation = "D:/Werk/NOVI/Eindopdracht/PuzzleImages";
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -87,21 +85,6 @@ public class AuthenticationController {
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
                 .buildAndExpand(newUsername).toUri();
-
-        return ResponseEntity.created(location).build();
-    }
-
-    @PostMapping(value = "/{username}/upload")
-    public ResponseEntity<Object> createPuzzle(
-            @PathVariable("username") String username,
-            @RequestBody Puzzle puzzle,
-            @RequestParam("image") MultipartFile multipartFile) throws IOException
-    {
-        multipartFile.transferTo(new File(storageLocation + multipartFile.getOriginalFilename()));
-        String newPuzzle = puzzleService.createPuzzle(puzzle, multipartFile.getOriginalFilename(), username);
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newPuzzle).toUri();
 
         return ResponseEntity.created(location).build();
     }

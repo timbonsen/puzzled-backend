@@ -23,9 +23,8 @@ public class PuzzleServiceImpl implements PuzzleService {
 
 
     @Override
-    public String createPuzzle(Puzzle puzzle, String fileName, String username) {
+    public String createPuzzle(Puzzle puzzle, String username) {
         Puzzle newPuzzle = puzzleRepository.save(puzzle);
-        newPuzzle.setImageFileName(fileName);
         User owner = userRepository.findByUsername(username);
         newPuzzle.setOwner(owner);
 
@@ -45,6 +44,11 @@ public class PuzzleServiceImpl implements PuzzleService {
     @Override
     public Collection<Puzzle> getPuzzles() {
         return null;
+    }
+
+    @Override
+    public Collection<Puzzle> getPuzzlesByOwner(String username) {
+        return puzzleRepository.getPuzzlesByOwner(username);
     }
 
     @Override

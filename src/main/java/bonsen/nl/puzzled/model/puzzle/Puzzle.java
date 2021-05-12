@@ -4,7 +4,7 @@ import bonsen.nl.puzzled.model.user.User;
 
 import javax.persistence.*;
 
-import java.util.Optional;
+import java.io.File;
 
 import static java.util.UUID.randomUUID;
 
@@ -47,13 +47,13 @@ public class Puzzle {
     private String tag3;
 
     @Column
-    private String imageFileName;
+    private File image;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private User owner;
 
-    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3, User owner) {
+    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3, File image, User owner) {
         this.title = title;
         this.eanCode = eanCode;
         this.numberOfPieces = numberOfPieces;
@@ -64,6 +64,7 @@ public class Puzzle {
         this.tag1 = tag1;
         this.tag2 = tag2;
         this.tag3 = tag3;
+        this.image = image;
         this.owner = owner;
     }
 
@@ -115,11 +116,11 @@ public class Puzzle {
         this.reserved = reserved;
     }
 
-    public String getImageFileName() {
-        return imageFileName;
+    public File getImage() {
+        return image;
     }
-    public void setImageFileName(String imageFileName) {
-        this.imageFileName = imageFileName;
+    public void setImage(File image) {
+        this.image = image;
     }
 
     public String getTag1() {

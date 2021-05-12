@@ -2,16 +2,22 @@ package bonsen.nl.puzzled.controller;
 
 import bonsen.nl.puzzled.exceptions.BadRequestException;
 import bonsen.nl.puzzled.model.address.Address;
+import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.service.address.AddressService;
+import bonsen.nl.puzzled.service.puzzle.PuzzleService;
 import bonsen.nl.puzzled.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
+import java.util.Set;
 
 
 @RestController
@@ -19,11 +25,16 @@ import java.util.Map;
 @RequestMapping(value = "/users")
 public class UserController {
 
+    private static final String storageLocation = "D:/Werk/NOVI/Eindopdracht/PuzzleImages/Uploaded/";
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private PuzzleService puzzleService;
 
     @GetMapping(value = "")
     public ResponseEntity<Object> getUsers() {
@@ -62,6 +73,37 @@ public class UserController {
     @PutMapping(value = "/{username}/address")
     public ResponseEntity<Object> updateAddress(@RequestBody Address address) {
         addressService.updateAddress(address);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{username}/puzzles")
+    public ResponseEntity<Object> getPuzzles(@PathVariable("username") String username) {
+        Set<Puzzle> puzzles = userService.getPuzzles(username);
+        return ResponseEntity.ok().body(puzzles);
+    }
+
+    @PostMapping(value = "/{username}/upload")
+    public ResponseEntity<Object> createPuzzle(
+            @PathVariable("username") String username,
+            @RequestBody Puzzle puzzle
+            ) {
+
+
+        String newPuzzleId = puzzleService.createPuzzle(puzzle, username);
+        userService.addPuzzle(username, puzzle);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(newPuzzleId).toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @DeleteMapping(value = "/{username}/delete-puzzle")
+    public ResponseEntity<Object> removePuzzle(
+            @PathVariable("username") String username,
+            @RequestBody String puzzleId) {
+        userService.removePuzzle(username, puzzleId);
+
         return ResponseEntity.noContent().build();
     }
 }

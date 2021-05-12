@@ -3,6 +3,8 @@ package bonsen.nl.puzzled.model.puzzle;
 import bonsen.nl.puzzled.exceptions.EmptyFieldException;
 import bonsen.nl.puzzled.model.user.User;
 
+import java.io.File;
+
 public class PuzzleBuilder {
 
     private String title;
@@ -15,6 +17,7 @@ public class PuzzleBuilder {
     private String tag1;
     private String tag2;
     private String tag3;
+    private File image;
     private User owner;
 
     public PuzzleBuilder() {
@@ -61,6 +64,10 @@ public class PuzzleBuilder {
         this.tag3 = tag3;
         return this;
     }
+    public PuzzleBuilder withImage(File image) {
+        this.image = image;
+        return this;
+    }
     public PuzzleBuilder withOwner(User owner) {
         this.owner = owner;
         return this;
@@ -72,6 +79,6 @@ public class PuzzleBuilder {
         } else if (eanCode.equals("")) {
             throw new EmptyFieldException();
         }
-        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, tag1, tag2, tag3, owner);
+        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, tag1, tag2, tag3, image, owner);
     }
 }

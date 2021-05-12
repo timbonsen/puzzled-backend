@@ -2,6 +2,7 @@ package bonsen.nl.puzzled.service.user;
 
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
+import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
 
 import java.util.Collection;
@@ -21,4 +22,7 @@ public interface UserService {
     public abstract void removeAuthority(String username, String authority);
     public abstract Optional<Address> getAddress(String id);
     public abstract void addAddress(String username, Address address);
+    public abstract Set<Puzzle> getPuzzles(String username);
+    public abstract void addPuzzle(String username, Puzzle puzzle);
+    public abstract void removePuzzle(String username, String puzzleId);
 }

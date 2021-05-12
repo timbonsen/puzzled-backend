@@ -6,6 +6,7 @@ import bonsen.nl.puzzled.model.puzzle.Puzzle;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -118,7 +119,7 @@ public class User {
     public void addPuzzle(Puzzle puzzle) {
         this.puzzles.add(puzzle);
     }
-    public void removePuzzle(Puzzle puzzle) {
+    public void removePuzzle(Optional<Puzzle> puzzle) {
         this.puzzles.remove(puzzle);
     }
 }
