@@ -3,6 +3,7 @@ package bonsen.nl.puzzled.controller;
 import bonsen.nl.puzzled.exceptions.BadRequestException;
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
+import bonsen.nl.puzzled.model.puzzle.PuzzleBuilder;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.service.address.AddressService;
 import bonsen.nl.puzzled.service.puzzle.PuzzleService;
@@ -24,8 +25,6 @@ import java.util.Set;
 @CrossOrigin(origins = "http://localhost:3000", maxAge=3600)
 @RequestMapping(value = "/users")
 public class UserController {
-
-    private static final String storageLocation = "D:/Werk/NOVI/Eindopdracht/PuzzleImages/Uploaded/";
 
     @Autowired
     private UserService userService;
@@ -88,14 +87,13 @@ public class UserController {
             @RequestBody Puzzle puzzle
             ) {
 
-
         String newPuzzleId = puzzleService.createPuzzle(puzzle, username);
         userService.addPuzzle(username, puzzle);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newPuzzleId).toUri();
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(newPuzzleId);
     }
 
     @DeleteMapping(value = "/{username}/delete-puzzle")

@@ -79,6 +79,6 @@ public class PuzzleBuilder {
         } else if (eanCode.equals("")) {
             throw new EmptyFieldException();
         }
-        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, tag1, tag2, tag3, image, owner);
+        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, tag1, tag2, tag3);
     }
 }

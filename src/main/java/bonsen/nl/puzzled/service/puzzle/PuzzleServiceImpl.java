@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
 
 @Service
 public class PuzzleServiceImpl implements PuzzleService {
+
+    private static final String storageLocation = "D:/Werk/NOVI/Eindopdracht/PuzzleImages/Uploaded/";
 
     @Autowired
     private PuzzleRepository puzzleRepository;
@@ -24,9 +27,12 @@ public class PuzzleServiceImpl implements PuzzleService {
 
     @Override
     public String createPuzzle(Puzzle puzzle, String username) {
+        File image = puzzle.getImage();
+        image = new File(storageLocation);
         Puzzle newPuzzle = puzzleRepository.save(puzzle);
         User owner = userRepository.findByUsername(username);
         newPuzzle.setOwner(owner);
+        newPuzzle.setImage(image);
 
         return newPuzzle.getId();
     }

@@ -53,7 +53,7 @@ public class Puzzle {
     @JoinColumn(name = "username")
     private User owner;
 
-    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3, File image, User owner) {
+    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3, User owner) {
         this.title = title;
         this.eanCode = eanCode;
         this.numberOfPieces = numberOfPieces;
@@ -64,12 +64,13 @@ public class Puzzle {
         this.tag1 = tag1;
         this.tag2 = tag2;
         this.tag3 = tag3;
-        this.image = image;
-        this.owner = owner;
     }
 
     public Puzzle() {
 
+    }
+
+    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3) {
     }
 
     public String getId() {
