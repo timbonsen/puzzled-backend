@@ -1,13 +1,8 @@
 package bonsen.nl.puzzled.controller;
 
-import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
-import bonsen.nl.puzzled.model.address.Address;
-import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.payload.request.AuthenticationRequest;
 import bonsen.nl.puzzled.payload.response.AuthenticationResponse;
-import bonsen.nl.puzzled.service.address.AddressService;
-import bonsen.nl.puzzled.service.puzzle.PuzzleService;
 import bonsen.nl.puzzled.service.user.CustomUserDetailsService;
 import bonsen.nl.puzzled.service.user.UserService;
 import bonsen.nl.puzzled.utils.JwtUtil;
@@ -19,11 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 
@@ -39,12 +31,6 @@ public class AuthenticationController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private AddressService addressService;
-
-    @Autowired
-    private PuzzleService puzzleService;
 
     @Autowired
     JwtUtil jwtUtl;
