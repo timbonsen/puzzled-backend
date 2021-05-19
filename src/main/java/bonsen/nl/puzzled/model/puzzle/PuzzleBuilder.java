@@ -15,8 +15,6 @@ public class PuzzleBuilder {
     private double height;
     private boolean reserved;
     private String tag1;
-    private String tag2;
-    private String tag3;
     private File image;
     private User owner;
 
@@ -56,15 +54,7 @@ public class PuzzleBuilder {
         this.tag1 = tag1;
         return this;
     }
-    public PuzzleBuilder withTag2(String tag2) {
-        this.tag2 = tag2;
-        return this;
-    }
-    public PuzzleBuilder withTag3(String tag3) {
-        this.tag3 = tag3;
-        return this;
-    }
-    public PuzzleBuilder withImage(File image) {
+     public PuzzleBuilder withImage(File image) {
         this.image = image;
         return this;
     }
@@ -79,6 +69,6 @@ public class PuzzleBuilder {
         } else if (eanCode.equals("")) {
             throw new EmptyFieldException();
         }
-        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, tag1, tag2, tag3);
+        return new Puzzle(title, eanCode, numberOfPieces, puzzleBrand, width, height, reserved, tag1);
     }
 }

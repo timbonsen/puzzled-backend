@@ -1,10 +1,10 @@
 package bonsen.nl.puzzled.model.puzzle;
 
+import bonsen.nl.puzzled.model.image.Image;
 import bonsen.nl.puzzled.model.user.User;
 
 import javax.persistence.*;
 
-import java.io.File;
 
 import static java.util.UUID.randomUUID;
 
@@ -40,20 +40,15 @@ public class Puzzle {
     @Column(nullable = false)
     private String tag1;
 
-    @Column
-    private String tag2;
-
-    @Column
-    private String tag3;
-
-    @Column
-    private File image;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     private User owner;
 
-    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3, User owner) {
+    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1) {
         this.title = title;
         this.eanCode = eanCode;
         this.numberOfPieces = numberOfPieces;
@@ -62,15 +57,9 @@ public class Puzzle {
         this.height = height;
         this.reserved = reserved;
         this.tag1 = tag1;
-        this.tag2 = tag2;
-        this.tag3 = tag3;
     }
 
     public Puzzle() {
-
-    }
-
-    public Puzzle(String title, String eanCode, int numberOfPieces, String puzzleBrand, double width, double height, boolean reserved, String tag1, String tag2, String tag3) {
     }
 
     public String getId() {
@@ -117,10 +106,10 @@ public class Puzzle {
         this.reserved = reserved;
     }
 
-    public File getImage() {
+    public Image getImage() {
         return image;
     }
-    public void setImage(File image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 
@@ -129,20 +118,6 @@ public class Puzzle {
     }
     public void setTag1(String tag1) {
         this.tag1 = tag1;
-    }
-
-    public String getTag2() {
-        return tag2;
-    }
-    public void setTag2(String tag2) {
-        this.tag2 = tag2;
-    }
-
-    public String getTag3() {
-        return tag3;
-    }
-    public void setTag3(String tag3) {
-        this.tag3 = tag3;
     }
 
     public User getOwner() {
