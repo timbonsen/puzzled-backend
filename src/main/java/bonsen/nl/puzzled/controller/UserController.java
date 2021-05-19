@@ -6,8 +6,13 @@ import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.puzzle.PuzzleBuilder;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.service.address.AddressService;
+import bonsen.nl.puzzled.service.image.ImageService;
 import bonsen.nl.puzzled.service.puzzle.PuzzleService;
 import bonsen.nl.puzzled.service.user.UserService;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,11 +89,26 @@ public class UserController {
     @PostMapping(value = "/{username}/upload")
     public ResponseEntity<Object> createPuzzle(
             @PathVariable("username") String username,
-            @RequestBody Puzzle puzzle
-            ) {
+            @RequestBody String puzzleInput
+            ) throws JSONException {
+        System.out.println("Dit krijg je binnen: " + puzzleInput);
+        JSONObject puzzleObject = new JSONObject(puzzleInput);
+        System.out.println(puzzleObject);
+        System.out.println(puzzleObject.getString("eanCode"));
+        Puzzle newPuzzle = new Puzzle(
+                puzzleObject.getString("title"),
+                puzzleObject.getString("eanCode"),
+                puzzleObject.getInt("numberOfPieces"),
+                puzzleObject.getString("puzzleBrand"),
+                puzzleObject.getDouble("puzzleWidth"),
+                puzzleObject.getDouble("puzzleHeight"),
+                puzzleObject.getBoolean("activated"),
+                puzzleObject.getString("tag1"));
 
-        String newPuzzleId = puzzleService.createPuzzle(puzzle, username);
-        userService.addPuzzle(username, puzzle);
+
+        System.out.println("Dit is de nieuwe puzzel: " + newPuzzle.getEanCode());
+        String newPuzzleId = puzzleService.createPuzzle(newPuzzle, username, puzzleObject.getString("imageId"));
+        userService.addPuzzle(username, newPuzzle);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(newPuzzleId).toUri();
