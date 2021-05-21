@@ -5,9 +5,7 @@ import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")

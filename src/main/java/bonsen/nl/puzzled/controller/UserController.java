@@ -82,8 +82,7 @@ public class UserController {
 
     @GetMapping(value = "/{username}/puzzles")
     public ResponseEntity<Object> getPuzzles(@PathVariable("username") String username) {
-        Set<Puzzle> puzzles = userService.getPuzzles(username);
-        return ResponseEntity.ok().body(puzzles);
+        return ResponseEntity.ok().body(userService.getPuzzles(username));
     }
 
     @PostMapping(value = "/{username}/upload")
@@ -91,10 +90,10 @@ public class UserController {
             @PathVariable("username") String username,
             @RequestBody String puzzleInput
             ) throws JSONException {
-        System.out.println("Dit krijg je binnen: " + puzzleInput);
+/*        System.out.println("Dit krijg je binnen: " + puzzleInput);*/
         JSONObject puzzleObject = new JSONObject(puzzleInput);
-        System.out.println(puzzleObject);
-        System.out.println(puzzleObject.getString("eanCode"));
+/*        System.out.println(puzzleObject);
+        System.out.println(puzzleObject.getString("eanCode"));*/
         Puzzle newPuzzle = new Puzzle(
                 puzzleObject.getString("title"),
                 puzzleObject.getString("eanCode"),
@@ -104,10 +103,9 @@ public class UserController {
                 puzzleObject.getDouble("puzzleHeight"),
                 puzzleObject.getBoolean("activated"),
                 puzzleObject.getString("tag1"));
-
-
+        String imageId = puzzleObject.getString("imageId");
         System.out.println("Dit is de nieuwe puzzel: " + newPuzzle.getEanCode());
-        String newPuzzleId = puzzleService.createPuzzle(newPuzzle, username, puzzleObject.getString("imageId"));
+        String newPuzzleId = puzzleService.createPuzzle(newPuzzle, username, imageId);
         userService.addPuzzle(username, newPuzzle);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

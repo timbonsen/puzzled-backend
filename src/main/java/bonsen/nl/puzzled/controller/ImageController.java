@@ -4,8 +4,10 @@ import bonsen.nl.puzzled.model.image.Image;
 import bonsen.nl.puzzled.payload.response.ResponseMessageAndID;
 import bonsen.nl.puzzled.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,5 +33,14 @@ public class ImageController {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessageAndID(message, id));
         }
+    }
+
+    @GetMapping(value = "/puzzles/image/{image-id}")
+    public ResponseEntity<Object> getImage(@PathVariable("image-id") String id) {
+        Image requestedImage = imageService.getImage(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(requestedImage.getType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + requestedImage.getName())
+                .body(new ByteArrayResource(requestedImage.getData()));
     }
 }

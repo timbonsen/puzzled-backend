@@ -4,21 +4,26 @@ import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
+import bonsen.nl.puzzled.model.image.Image;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.repository.AddressRepository;
 import bonsen.nl.puzzled.repository.AuthorityRepository;
 import bonsen.nl.puzzled.repository.PuzzleRepository;
 import bonsen.nl.puzzled.repository.UserRepository;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -120,9 +125,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Puzzle> getPuzzles(String username) {
-        User user = userRepository.findById(username).get();
-        return user.getPuzzles();
+    public String getPuzzles(String username) {
+        User user = userRepository.findByUsername(username);
+        System.out.println("Dit is de gebruiker wiens puzzels worden opgevraagd: " + user);
+        Collection<Puzzle> puzzleCollection = puzzleRepository.getPuzzlesByOwner(user);
+        JSONArray jsonArray = new JSONArray();
+        for (Puzzle puzzle:puzzleCollection) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", puzzle.getId());
+            jsonObject.put("title", puzzle.getTitle());
+            jsonObject.put("eanCode", puzzle.getEanCode());
+            jsonObject.put("numberOfPieces", puzzle.getNumberOfPieces());
+            jsonObject.put("puzzleBrand", puzzle.getPuzzleBrand());
+            Image image = puzzle.getImage();
+            jsonObject.put("imageId", image.getId());
+            /*System.out.println(jsonObject);*/
+            jsonArray.put(jsonObject);
+        }
+        System.out.println(jsonArray);
+        return jsonArray.toString();
     }
 
     @Override
@@ -138,5 +159,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(username).get();
         Optional<Puzzle> puzzle = puzzleRepository.findById(puzzleId);
         user.removePuzzle(puzzle);
+        userRepository.save(user);
     }
 }
