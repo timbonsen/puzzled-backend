@@ -129,8 +129,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username);
         System.out.println("Dit is de gebruiker wiens puzzels worden opgevraagd: " + user);
         Collection<Puzzle> puzzleCollection = puzzleRepository.getPuzzlesByOwner(user);
-        JSONArray jsonArray = new JSONArray();
-        for (Puzzle puzzle:puzzleCollection) {
+        JSONArray jsonArray = new JSONArray(puzzleCollection);
+        /*for (Puzzle puzzle:puzzleCollection) {
+
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", puzzle.getId());
             jsonObject.put("title", puzzle.getTitle());
@@ -139,9 +140,9 @@ public class UserServiceImpl implements UserService {
             jsonObject.put("puzzleBrand", puzzle.getPuzzleBrand());
             Image image = puzzle.getImage();
             jsonObject.put("imageId", image.getId());
-            /*System.out.println(jsonObject);*/
+            System.out.println(jsonObject);
             jsonArray.put(jsonObject);
-        }
+        }*/
         System.out.println(jsonArray);
         return jsonArray.toString();
     }

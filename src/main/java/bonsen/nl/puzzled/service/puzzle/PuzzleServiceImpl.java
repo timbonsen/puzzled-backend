@@ -51,7 +51,22 @@ public class PuzzleServiceImpl implements PuzzleService {
 
     @Override
     public Collection<Puzzle> getPuzzles() {
-        return null;
+        return puzzleRepository.findAll();
+    }
+
+    @Override
+    public Collection<Puzzle> getPuzzlesByCategory(String tag1) {
+        return puzzleRepository.findAllByTag1(tag1);
+    }
+
+    @Override
+    public Collection<Puzzle> getPuzzlesByBrand(String brand) {
+        return puzzleRepository.findAllByPuzzleBrand(brand);
+    }
+
+    @Override
+    public Collection<Puzzle> getPuzzlesByNumberOfPieces(int numberOfPieces) {
+        return puzzleRepository.findAllByNumberOfPieces(numberOfPieces);
     }
 
     @Override

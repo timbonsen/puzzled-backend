@@ -8,18 +8,28 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000",maxAge = 3600)
-@RequestMapping(value = "/users/puzzles")
+@RequestMapping(value = "/puzzles")
 public class PuzzleController {
 
     @Autowired
     private PuzzleService puzzleService;
 
     @GetMapping(value = "/")
-    public ResponseEntity<Object> getPuzzles() { return ResponseEntity.ok().body(puzzleService.getPuzzles()); }
+    public ResponseEntity<Object> getAllPuzzles() { return ResponseEntity.ok().body(puzzleService.getPuzzles()); }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Object> getPuzzle(@PathVariable("id") String id) {
-        return ResponseEntity.ok().body(puzzleService.getPuzzle(id));
+    @GetMapping(value = "/category/{searchBy}")
+    public ResponseEntity<Object> getPuzzlesByCategory(@PathVariable("searchBy") String searchBy) {
+        return ResponseEntity.ok().body(puzzleService.getPuzzlesByCategory(searchBy));
+    }
+
+    @GetMapping(value = "/brand/{searchBy}")
+    public ResponseEntity<Object> getPuzzlesByBrand(@PathVariable("searchBy") String searchBy) {
+        return ResponseEntity.ok().body(puzzleService.getPuzzlesByBrand(searchBy));
+    }
+
+    @GetMapping(value = "/number-of-pieces/{searchBy}")
+    public ResponseEntity<Object> getPuzzlesByNumberOfPieces(@PathVariable("searchBy") int searchBy) {
+        return ResponseEntity.ok().body(puzzleService.getPuzzlesByNumberOfPieces(searchBy));
     }
 
     @PutMapping(value = "/{id}")

@@ -9,10 +9,7 @@ import java.util.Collection;
 public interface PuzzleRepository extends JpaRepository<Puzzle, String> {
 
     Collection<Puzzle> getPuzzlesByOwner(User owner);
-/*    List<Puzzle> findAllByCategory(String category);
-    List<Puzzle> findAllByEanCode(String eanCode);
-    List<Puzzle> findAllByTitle(String title);
-    List<Puzzle> findAllByPuzzleBrand(String puzzleBrand);
-
-    Optional<Puzzle> findById();*/
+    Collection<Puzzle> findAllByTag1(String tag1);
+    Collection<Puzzle> findAllByPuzzleBrand(String puzzleBrand);
+    Collection<Puzzle> findAllByNumberOfPieces(int numberOfPieces);
 }
