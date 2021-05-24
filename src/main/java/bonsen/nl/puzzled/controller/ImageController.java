@@ -26,7 +26,7 @@ public class ImageController {
         String id = null;
         try {
             Image uploadedImage = imageService.storeImage(file);
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            message = "Het plaatje " + file.getOriginalFilename() + " is succesvol toegevoegd!";
             id = uploadedImage.getId();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessageAndID(message, id));
         } catch (Exception e) {

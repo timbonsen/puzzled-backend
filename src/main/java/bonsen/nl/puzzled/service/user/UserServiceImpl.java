@@ -18,9 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -42,8 +40,13 @@ public class UserServiceImpl implements UserService {
     private AuthorityRepository authorityRepository;
 
     @Override
-    public Collection<User> getUsers() {
-        return userRepository.findAll();
+    public Set<String> getUsers() {
+        Collection<User> allUsers = userRepository.findAll();
+        Set<String> allUsernames = new HashSet<>();
+        for (User user:allUsers) {
+            allUsernames.add(user.getUsername());
+        }
+        return allUsernames;
     }
 
     @Override

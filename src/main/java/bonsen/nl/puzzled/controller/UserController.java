@@ -40,11 +40,6 @@ public class UserController {
     @Autowired
     private PuzzleService puzzleService;
 
-    @GetMapping(value = "")
-    public ResponseEntity<Object> getUsers() {
-        return ResponseEntity.ok().body(userService.getUsers());
-    }
-
     @GetMapping(value = "/{username}")
     public ResponseEntity<Object> getUser(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getUser(username));

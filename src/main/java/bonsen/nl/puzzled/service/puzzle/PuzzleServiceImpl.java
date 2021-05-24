@@ -9,9 +9,11 @@ import bonsen.nl.puzzled.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class PuzzleServiceImpl implements PuzzleService {
 
@@ -46,12 +48,12 @@ public class PuzzleServiceImpl implements PuzzleService {
 
     @Override
     public void deletePuzzle(String id) {
-
+        puzzleRepository.deleteById(id);
     }
 
     @Override
     public Collection<Puzzle> getPuzzles() {
-        return puzzleRepository.findAll();
+        return puzzleRepository.findAllByIdIsNotNull();
     }
 
     @Override

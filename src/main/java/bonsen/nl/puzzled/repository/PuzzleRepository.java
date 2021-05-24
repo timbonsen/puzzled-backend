@@ -8,6 +8,7 @@ import java.util.Collection;
 
 public interface PuzzleRepository extends JpaRepository<Puzzle, String> {
 
+    Collection<Puzzle> findAllByIdIsNotNull();
     Collection<Puzzle> getPuzzlesByOwner(User owner);
     Collection<Puzzle> findAllByTag1(String tag1);
     Collection<Puzzle> findAllByPuzzleBrand(String puzzleBrand);

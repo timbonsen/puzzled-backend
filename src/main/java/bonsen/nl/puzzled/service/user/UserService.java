@@ -16,7 +16,7 @@ public interface UserService {
     String createUser(User user);
     void updateUser(String username, User user);
     void deleteUser(String username);
-    Collection<User> getUsers();
+    Set<String> getUsers();
     User getUser(String username);
     boolean userExists(String username);
 

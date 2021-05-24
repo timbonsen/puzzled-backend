@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", maxAge=3600)
@@ -22,12 +23,18 @@ public class AdminController {
         return new ResponseEntity<>("SECURED REST endpoint: /admin", HttpStatus.OK);
     }
 
+    @GetMapping(value = "/all-users")
+    public ResponseEntity<Object> getUsers() {
+        Set<String> allUsernames = userService.getUsers();
+        return ResponseEntity.ok().body(allUsernames);
+    }
+
     @PostMapping(value = "/{username}/authorities")
     public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
         try {
             String authorityName = (String) fields.get("authority");
             userService.addAuthority(username, authorityName);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         }
         catch (Exception ex) {
             throw new BadRequestException();
@@ -37,7 +44,7 @@ public class AdminController {
     @DeleteMapping(value = "/{username}/authorities/{authority}")
     public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
         userService.removeAuthority(username, authority);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }
