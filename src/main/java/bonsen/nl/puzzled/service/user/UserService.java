@@ -14,20 +14,24 @@ import java.util.Set;
 public interface UserService {
 
     String createUser(User user);
-    void updateUser(String username, User user);
-    void deleteUser(String username);
+    boolean updateUser(String username, User user);
+    boolean deleteUser(String username);
     Set<String> getUsers();
     User getUser(String username);
+
     boolean userExists(String username);
+    boolean emailExists(String email);
+
+    String encodePassword(String password);
 
     Set<Authority> getAuthorities(String username);
-    void addAuthority(String username, String authority);
-    void removeAuthority(String username, String authority);
+    boolean addAuthority(String username, String authorityRole);
+    boolean removeAuthority(String username, String authority);
 
-    Optional<Address> getAddress(String id);
-    void addAddress(String username, Address address);
+    Address getAddress(String id);
+    boolean addAddress(String username, String addressId);
 
     String getPuzzles(String username);
-    void addPuzzle(String username, Puzzle puzzle);
-    void removePuzzle(String username, String puzzleId);
+    boolean addPuzzle(String username, Puzzle puzzle);
+    boolean removePuzzle(String username, String puzzleId);
 }

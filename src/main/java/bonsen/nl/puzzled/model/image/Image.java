@@ -12,10 +12,10 @@ public class Image {
     @Column(nullable = false, unique = true)
     private String id = randomUUID().toString();
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false)
     private String type;
 
     @Lob

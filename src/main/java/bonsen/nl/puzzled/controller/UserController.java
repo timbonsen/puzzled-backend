@@ -1,29 +1,23 @@
 package bonsen.nl.puzzled.controller;
 
 import bonsen.nl.puzzled.exceptions.BadRequestException;
+import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
-import bonsen.nl.puzzled.model.puzzle.PuzzleBuilder;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.service.address.AddressService;
-import bonsen.nl.puzzled.service.image.ImageService;
 import bonsen.nl.puzzled.service.puzzle.PuzzleService;
 import bonsen.nl.puzzled.service.user.UserService;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
-import java.util.Map;
-import java.util.Set;
+
 
 
 @RestController
@@ -41,20 +35,20 @@ public class UserController {
     private PuzzleService puzzleService;
 
     @GetMapping(value = "/{username}")
-    public ResponseEntity<Object> getUser(@PathVariable("username") String username) {
+    public ResponseEntity<Object> getUser(@PathVariable("username") String username) throws UsernameNotFoundException {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
 
     @PutMapping(value = "/{username}")
     public ResponseEntity<Object> updateUser(@PathVariable("username") String username, @RequestBody User user) {
         userService.updateUser(username, user);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/{username}/authorities")
@@ -64,15 +58,24 @@ public class UserController {
 
     @PostMapping(value = "/{username}/address")
     public ResponseEntity<Object> createAddress(@PathVariable("username") String username, @RequestBody Address address) {
-        addressService.createAddress(address);
-        userService.addAddress(username, address);
-        return ResponseEntity.noContent().build();
+        String newAddressId = addressService.createAddress(address);
+        if(userService.addAddress(username, newAddressId)) {
+            return ResponseEntity.ok().build();
+        } else throw new BadRequestException();
     }
 
     @PutMapping(value = "/{username}/address")
     public ResponseEntity<Object> updateAddress(@RequestBody Address address) {
-        addressService.updateAddress(address);
-        return ResponseEntity.noContent().build();
+        if (addressService.updateAddress(address)) {
+            return ResponseEntity.ok().build();
+        } else throw new BadRequestException();
+    }
+
+    @DeleteMapping(value = "/{username}/address")
+    public ResponseEntity<Object> deleteAddress(@RequestBody String addressId) {
+        if (addressService.deleteAddress(addressId)) {
+            return ResponseEntity.ok().build();
+        } else throw new BadRequestException();
     }
 
     @GetMapping(value = "/{username}/puzzles")
@@ -85,10 +88,9 @@ public class UserController {
             @PathVariable("username") String username,
             @RequestBody String puzzleInput
             ) throws JSONException {
-/*        System.out.println("Dit krijg je binnen: " + puzzleInput);*/
+
         JSONObject puzzleObject = new JSONObject(puzzleInput);
-/*        System.out.println(puzzleObject);
-        System.out.println(puzzleObject.getString("eanCode"));*/
+
         Puzzle newPuzzle = new Puzzle(
                 puzzleObject.getString("title"),
                 puzzleObject.getString("eanCode"),
@@ -100,7 +102,9 @@ public class UserController {
                 puzzleObject.getString("tag1"));
         String imageId = puzzleObject.getString("imageId");
         System.out.println("Dit is de nieuwe puzzel: " + newPuzzle.getEanCode());
-        String newPuzzleId = puzzleService.createPuzzle(newPuzzle, username, imageId);
+        puzzleService.setOwner(newPuzzle, username);
+        puzzleService.setImage(newPuzzle, imageId);
+        String newPuzzleId = puzzleService.createPuzzle(newPuzzle);
         userService.addPuzzle(username, newPuzzle);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

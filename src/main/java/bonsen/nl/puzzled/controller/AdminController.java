@@ -18,7 +18,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/")
     public ResponseEntity<Object> getMessage() {
         return new ResponseEntity<>("SECURED REST endpoint: /admin", HttpStatus.OK);
     }

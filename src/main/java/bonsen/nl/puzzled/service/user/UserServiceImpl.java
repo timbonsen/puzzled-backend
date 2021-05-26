@@ -1,9 +1,12 @@
 package bonsen.nl.puzzled.service.user;
 
+import bonsen.nl.puzzled.exceptions.AddressNotFoundException;
+import bonsen.nl.puzzled.exceptions.PuzzleNotFoundException;
 import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
+import bonsen.nl.puzzled.model.authority.AuthorityKey;
 import bonsen.nl.puzzled.model.image.Image;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
@@ -50,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String username) {
+    public User getUser(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
     }
 
@@ -60,109 +63,133 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean emailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    @Override
     public String createUser(User user) {
-        String password = passwordEncoder.encode(user.getPassword());
-        user.setPassword(password);
-        Authority newAuthority = new Authority(user.getUsername(), "ROLE_USER");
-        user.addAuthority(newAuthority);
         User newUser = userRepository.save(user);
-        Set<Authority> authorities = newUser.getAuthorities();
-        for (Authority authority: authorities) {
-            authorityRepository.save(authority);
-        }
         return newUser.getUsername();
     }
 
     @Override
-    public void deleteUser(String username) {
+    public boolean deleteUser(String username) {
         userRepository.deleteById(username);
+        return !userRepository.existsById(username);
     }
 
     @Override
-    public void updateUser(String username, User newUser) {
-        if (!userRepository.existsById(username)) throw new RecordNotFoundException();
-        User user = userRepository.findById(username).get();
-        user.setPassword(newUser.getPassword());
-        user.setEmail(newUser.getEmail());
-        user.setFirstname(newUser.getFirstname());
-        user.setLastname(newUser.getLastname());
-        user.addAddress(newUser.getAddress());
-        userRepository.save(user);
+    public boolean updateUser(String username, User newUser) {
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            user.setPassword(newUser.getPassword());
+            user.setEmail(newUser.getEmail());
+            user.setFirstname(newUser.getFirstname());
+            user.setLastname(newUser.getLastname());
+            user.addAddress(newUser.getAddress());
+            userRepository.save(user);
+            return true;
+        }
+        throw new RecordNotFoundException();
     }
 
     @Override
     public Set<Authority> getAuthorities(String username) {
-        if (!userRepository.existsById(username)) throw new UsernameNotFoundException(username);
-        User user = userRepository.findById(username).get();
-        return user.getAuthorities();
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            return user.getAuthorities();
+        }
+        throw new UsernameNotFoundException(username);
     }
 
     @Override
-    public void addAuthority(String username, String authority) {
-        if (!userRepository.existsById(username)) throw new UsernameNotFoundException(username);
-        User user = userRepository.findById(username).get();
-        user.addAuthority(new Authority(username, authority));
-        userRepository.save(user);
+    public boolean addAuthority(String username, String authorityRole) {
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            Authority newAuthority = new Authority(username, authorityRole);
+            authorityRepository.save(newAuthority);
+            user.addAuthority(newAuthority);
+            userRepository.save(user);
+            return true;
+        }
+        throw new UsernameNotFoundException(username);
     }
 
     @Override
-    public void removeAuthority(String username, String authority) {
-        if (!userRepository.existsById(username)) throw new UsernameNotFoundException(username);
-        User user = userRepository.findById(username).get();
-        Authority authorityToRemove = user.getAuthorities().stream().filter((a) -> a.getAuthority().equalsIgnoreCase(authority)).findAny().get();
-        user.removeAuthority(authorityToRemove);
-        userRepository.save(user);
+    public boolean removeAuthority(String username, String authority) {
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            Authority authorityToRemove = user.getAuthorities().stream().filter((a) -> a.getAuthority().equalsIgnoreCase(authority)).findAny().get();
+            user.removeAuthority(authorityToRemove);
+            userRepository.save(user);
+            return true;
+        }
+        throw new UsernameNotFoundException(username);
     }
 
     @Override
-    public Optional<Address> getAddress(String id) {
-        return addressRepository.findById(id);
+    public Address getAddress(String id) {
+        Address address = addressRepository.findById(id).orElse(null);
+        if (address != null) {
+            return address;
+        }
+        throw new AddressNotFoundException(id);
     }
 
     @Override
-    public void addAddress(String username, Address address) {
-        if (!userRepository.existsById(username)) throw new UsernameNotFoundException(username);
-        User user = userRepository.findById(username).get();
-        user.addAddress(address);
-        userRepository.save(user);
+    public boolean addAddress(String username, String addressId) {
+        User user = userRepository.findById(username).orElse(null);
+        Address address = addressRepository.findById(addressId).orElse(null);
+
+        if (user != null) {
+            if (address != null) {
+                user.addAddress(address);
+                userRepository.save(user);
+                return true;
+            }
+            throw new AddressNotFoundException(addressId);
+        }
+        throw new UsernameNotFoundException(username);
     }
 
     @Override
     public String getPuzzles(String username) {
         User user = userRepository.findByUsername(username);
-        System.out.println("Dit is de gebruiker wiens puzzels worden opgevraagd: " + user);
         Collection<Puzzle> puzzleCollection = puzzleRepository.getPuzzlesByOwner(user);
         JSONArray jsonArray = new JSONArray(puzzleCollection);
-        /*for (Puzzle puzzle:puzzleCollection) {
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", puzzle.getId());
-            jsonObject.put("title", puzzle.getTitle());
-            jsonObject.put("eanCode", puzzle.getEanCode());
-            jsonObject.put("numberOfPieces", puzzle.getNumberOfPieces());
-            jsonObject.put("puzzleBrand", puzzle.getPuzzleBrand());
-            Image image = puzzle.getImage();
-            jsonObject.put("imageId", image.getId());
-            System.out.println(jsonObject);
-            jsonArray.put(jsonObject);
-        }*/
-        System.out.println(jsonArray);
         return jsonArray.toString();
     }
 
     @Override
-    public void addPuzzle(String username, Puzzle puzzle) {
-        if (!userRepository.existsById(username)) throw new UsernameNotFoundException(username);
-        User user = userRepository.findById(username).get();
-        user.addPuzzle(puzzle);
-        userRepository.save(user);
+    public boolean addPuzzle(String username, Puzzle puzzle) {
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            user.addPuzzle(puzzle);
+            userRepository.save(user);
+            return true;
+        }
+        throw new UsernameNotFoundException(username);
     }
 
     @Override
-    public void removePuzzle(String username, String puzzleId) {
-        User user = userRepository.findById(username).get();
-        Optional<Puzzle> puzzle = puzzleRepository.findById(puzzleId);
-        user.removePuzzle(puzzle);
-        userRepository.save(user);
+    public boolean removePuzzle(String username, String puzzleId) {
+        User user = userRepository.findById(username).orElse(null);
+        Puzzle puzzle = puzzleRepository.findById(puzzleId).orElse(null);
+
+        if (user != null) {
+            if (puzzle != null) {
+                user.removePuzzle(puzzle);
+                userRepository.save(user);
+                return true;
+            }
+            throw new PuzzleNotFoundException(puzzleId);
+        }
+        throw new UsernameNotFoundException(username);
     }
 }

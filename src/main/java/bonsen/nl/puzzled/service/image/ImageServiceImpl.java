@@ -1,5 +1,6 @@
 package bonsen.nl.puzzled.service.image;
 
+import bonsen.nl.puzzled.exceptions.BadRequestException;
 import org.springframework.util.StringUtils;
 import bonsen.nl.puzzled.model.image.Image;
 import bonsen.nl.puzzled.repository.ImageRepository;
@@ -25,6 +26,10 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image getImage(String id) {
-        return imageRepository.findById(id).get();
+        Image image = imageRepository.findById(id).orElse(null);
+        if (image != null) {
+            return image;
+        }
+        throw new BadRequestException();
     }
 }

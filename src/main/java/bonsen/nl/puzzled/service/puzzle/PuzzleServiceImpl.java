@@ -1,5 +1,8 @@
 package bonsen.nl.puzzled.service.puzzle;
 
+import bonsen.nl.puzzled.exceptions.BadRequestException;
+import bonsen.nl.puzzled.exceptions.PuzzleNotFoundException;
+import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
 import bonsen.nl.puzzled.model.image.Image;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
@@ -26,29 +29,50 @@ public class PuzzleServiceImpl implements PuzzleService {
     @Autowired
     private ImageRepository imageRepository;
 
-
     @Override
-    public String createPuzzle(Puzzle puzzle, String username, String imageId) {
-
-        User owner = userRepository.findByUsername(username);
-        System.out.println("De eigenaar van de puzzel: " + owner.getUsername());
-        puzzle.setOwner(owner);
-        Image puzzleImage = imageRepository.findById(imageId).get();
-        System.out.println("De image ID is: " + puzzleImage.getId());
-        puzzle.setImage(puzzleImage);
+    public String createPuzzle(Puzzle puzzle) {
         Puzzle newPuzzle = puzzleRepository.save(puzzle);
-
         return newPuzzle.getId();
     }
 
     @Override
-    public void updatePuzzle(String id, Puzzle puzzle) {
-
+    public boolean setImage(Puzzle puzzle, String imageId) {
+        Image puzzleImage = imageRepository.findById(imageId).orElse(null);
+        if (puzzleImage != null) {
+            puzzle.setImage(puzzleImage);
+            return true;
+        }
+        throw new BadRequestException();
     }
 
     @Override
-    public void deletePuzzle(String id) {
-        puzzleRepository.deleteById(id);
+    public boolean setOwner(Puzzle puzzle, String username) {
+        User owner = userRepository.findById(username).orElse(null);
+        if (owner != null) {
+            puzzle.setOwner(owner);
+            return true;
+        }
+        throw new UsernameNotFoundException(username);
+    }
+
+    @Override
+    public boolean updatePuzzle(String id, Puzzle updatedPuzzle) {
+        Puzzle oldPuzzle = puzzleRepository.findById(id).orElse(null);
+        if (oldPuzzle != null) {
+            puzzleRepository.save(updatedPuzzle);
+            return true;
+        }
+        throw new PuzzleNotFoundException(id);
+    }
+
+    @Override
+    public boolean deletePuzzle(String id) {
+        Puzzle puzzle = puzzleRepository.findById(id).orElse(null);
+        if (puzzle != null) {
+            puzzleRepository.deleteById(id);
+            return true;
+        }
+        throw new PuzzleNotFoundException(id);
     }
 
     @Override
@@ -78,12 +102,16 @@ public class PuzzleServiceImpl implements PuzzleService {
     }
 
     @Override
-    public Optional<Puzzle> getPuzzle(String id) {
-        return puzzleRepository.findById(id);
+    public Puzzle getPuzzle(String id) {
+        Puzzle puzzle = puzzleRepository.findById(id).orElse(null);
+        if (puzzle == null) {
+            throw new PuzzleNotFoundException(id);
+        }
+        return puzzle;
     }
 
     @Override
     public boolean puzzleExists(String id) {
-        return false;
+        return puzzleRepository.existsById(id);
     }
 }

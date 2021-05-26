@@ -1,8 +1,11 @@
 package bonsen.nl.puzzled.controller;
 
+import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
+import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.payload.request.AuthenticationRequest;
 import bonsen.nl.puzzled.payload.response.AuthenticationResponse;
+import bonsen.nl.puzzled.payload.response.ResponseMessage;
 import bonsen.nl.puzzled.service.user.CustomUserDetailsService;
 import bonsen.nl.puzzled.service.user.UserService;
 import bonsen.nl.puzzled.utils.JwtUtil;
@@ -46,6 +49,10 @@ public class AuthenticationController {
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
 
+        if (!userService.userExists(username)) {
+            throw new UsernameNotFoundException(username);
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
@@ -64,11 +71,20 @@ public class AuthenticationController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<Object> createUser(@RequestBody User user) {
-        String newUsername = userService.createUser(user);
+        if (userService.userExists(user.getUsername())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Username is already taken!"));
+        } else if (userService.emailExists(user.getEmail())) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Email is already taken!"));
+        } else {
+            String encodedPassword = userService.encodePassword(user.getPassword());
+            user.setPassword(encodedPassword);
+            userService.addAuthority(user.getUsername(), "ROLE_USER");
+            String newUsername = userService.createUser(user);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
-                .buildAndExpand(newUsername).toUri();
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
+                    .buildAndExpand(newUsername).toUri();
 
-        return ResponseEntity.created(location).build();
+            return ResponseEntity.created(location).build();
+        }
     }
 }

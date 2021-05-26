@@ -18,7 +18,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, name = "email")
+    @Column(nullable = false, name = "email", unique = true)
     private String email;
 
     @Column(name = "firstname")
@@ -117,7 +117,7 @@ public class User {
     public void addPuzzle(Puzzle puzzle) {
         this.puzzles.add(puzzle);
     }
-    public void removePuzzle(Optional<Puzzle> puzzle) {
+    public void removePuzzle(Puzzle puzzle) {
         this.puzzles.remove(puzzle);
     }
 }

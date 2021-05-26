@@ -6,14 +6,16 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface PuzzleService {
-    String createPuzzle(Puzzle puzzle, String username, String imageId);
-    void updatePuzzle(String id, Puzzle puzzle);
-    void deletePuzzle(String id);
+    String createPuzzle(Puzzle puzzle);
+    boolean setOwner(Puzzle puzzle, String username);
+    boolean setImage(Puzzle puzzle, String imageId);
+    boolean updatePuzzle(String id, Puzzle updatedPuzzle);
+    boolean deletePuzzle(String id);
     Collection<Puzzle> getPuzzles();
     Collection<Puzzle> getPuzzlesByCategory(String tag1);
     Collection<Puzzle> getPuzzlesByBrand(String brand);
     Collection<Puzzle> getPuzzlesByNumberOfPieces(int numberOfPieces);
     Collection<Puzzle> getPuzzlesByOwner(String username);
-    Optional<Puzzle> getPuzzle(String id);
+    Puzzle getPuzzle(String id);
     boolean puzzleExists(String id);
 }

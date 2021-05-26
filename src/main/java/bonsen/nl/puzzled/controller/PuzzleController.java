@@ -43,7 +43,7 @@ public class PuzzleController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<Object> updatePuzzle(@PathVariable("id") String id, @RequestBody Puzzle puzzle) {
         puzzleService.updatePuzzle(id, puzzle);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(new ResponseMessage("Puzzle successfully updated"));
     }
 
     @DeleteMapping(value = "/{id}")
@@ -51,12 +51,10 @@ public class PuzzleController {
         String message;
         try {
             puzzleService.deletePuzzle(id);
-            message = "Puzzle succesfully deleted";
+            message = "Puzzle successfully deleted";
         } catch (Exception e) {
             message = "Could not delete the puzzle";
         }
-
-
         return ResponseEntity.ok().body(new ResponseMessage(message));
     }
 

@@ -19,21 +19,24 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void updateAddress(Address newAddress) {
+    public boolean updateAddress(Address newAddress) {
         String id = newAddress.getId();
-        if (!addressRepository.existsById(id)) throw new RecordNotFoundException();
-        Address address = addressRepository.findById(id).get();
-        address.setStreetName(newAddress.getStreetName());
-        address.setHouseNumber(newAddress.getHouseNumber());
-        address.setPostalCode(newAddress.getPostalCode());
-        address.setCity(newAddress.getCity());
-        address.setCountry(newAddress.getCountry());
-        addressRepository.save(address);
+        Address address = addressRepository.findById(id).orElse(null);
+        if (address != null) {
+            address.setStreetName(newAddress.getStreetName());
+            address.setHouseNumber(newAddress.getHouseNumber());
+            address.setPostalCode(newAddress.getPostalCode());
+            address.setCity(newAddress.getCity());
+            address.setCountry(newAddress.getCountry());
+            addressRepository.save(address);
+            return true;
+        }
+        throw new RecordNotFoundException();
     }
 
     @Override
-    public void deleteAddress(String id) {
+    public boolean deleteAddress(String id) {
         addressRepository.deleteById(id);
+        return !addressRepository.existsById(id);
     }
-
 }
