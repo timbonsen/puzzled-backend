@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class BadCredentialsException extends RuntimeException{
+public class WrongPasswordException extends RuntimeException{
 
-    public BadCredentialsException() {
-        super("Wrong username or password");
+    public WrongPasswordException() {
+        super("Verkeerde wachtwoord ingevoerd!");
     }
 }
