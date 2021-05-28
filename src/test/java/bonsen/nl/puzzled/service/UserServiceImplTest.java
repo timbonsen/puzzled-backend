@@ -13,17 +13,13 @@ import bonsen.nl.puzzled.service.user.UserServiceImpl;
 import org.json.JSONArray;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashSet;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +40,9 @@ public class UserServiceImplTest {
     @Mock
     private PuzzleRepository puzzleRepository;
 
+    @Mock
+    private AuthorityRepository authorityRepository;
+
     private Puzzle puzzle;
     private User user;
     private Address address;
@@ -51,6 +50,7 @@ public class UserServiceImplTest {
     private String id;
     private Authority userAuthority;
     private Authority adminAuthority;
+    private String authorityForUser = "ROLE_USER";
     private JSONArray jsonArray;
 
     @BeforeEach
@@ -99,7 +99,7 @@ public class UserServiceImplTest {
 
     @Test
     void test_getUser() {
-        Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+        Mockito.when(userRepository.findById(user.getUsername())).thenReturn(java.util.Optional.ofNullable(user));
 
         User responseUser = userService.getUser(user.getUsername());
 
@@ -119,7 +119,8 @@ public class UserServiceImplTest {
 
     @Test
     void test_deleteUser() {
-        Mockito.when(userRepository.existsById(user.getUsername())).thenReturn(false);
+        Mockito.when(userRepository.findById(user.getUsername())).thenReturn(java.util.Optional.ofNullable(user));
+        user.removePuzzle(puzzle);
 
         boolean hasWorked = userService.deleteUser(user.getUsername());
 
@@ -128,7 +129,6 @@ public class UserServiceImplTest {
 
     @Test
     void test_updateUser() {
-        Mockito.when(userRepository.existsById(user.getUsername())).thenReturn(true);
         Mockito.when(userRepository.findById(user.getUsername())).thenReturn(java.util.Optional.ofNullable(user));
 
         boolean hasWorked = userService.updateUser(user.getUsername(), user);
@@ -166,14 +166,13 @@ public class UserServiceImplTest {
         Assertions.assertSame(responseAuthorities, user.getAuthorities());
     }
 
-    @Disabled
     @Test
     void test_addAuthority() {
-        Mockito.when(userRepository.findById(user.getUsername())).thenReturn(java.util.Optional.ofNullable(user));
 
-        boolean hasWorked = userService.addAuthority(user.getUsername(), userAuthority.getAuthority());
+        User responseUser = userService.addAuthority(user, authorityForUser);
 
-        Assertions.assertTrue(hasWorked);
+        Assertions.assertNotNull(responseUser);
+        Assertions.assertEquals(responseUser, user);
     }
 
     @Test

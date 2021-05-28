@@ -1,11 +1,12 @@
 package bonsen.nl.puzzled.controller;
 
+import bonsen.nl.puzzled.exceptions.EmailAlreadyExistsException;
+import bonsen.nl.puzzled.exceptions.UsernameAlreadyExistsException;
 import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
-import bonsen.nl.puzzled.model.authority.Authority;
+import bonsen.nl.puzzled.exceptions.WrongPasswordException;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.payload.request.AuthenticationRequest;
 import bonsen.nl.puzzled.payload.response.AuthenticationResponse;
-import bonsen.nl.puzzled.payload.response.ResponseMessage;
 import bonsen.nl.puzzled.service.user.CustomUserDetailsService;
 import bonsen.nl.puzzled.service.user.UserService;
 import bonsen.nl.puzzled.utils.JwtUtil;
@@ -44,7 +45,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
@@ -59,7 +60,7 @@ public class AuthenticationController {
             );
         }
         catch (BadCredentialsException ex) {
-            throw new Exception("Incorrect username or password", ex);
+            throw new WrongPasswordException();
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -70,16 +71,16 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<Object> createUser(@RequestBody User user) {
+    public ResponseEntity<String> createUser(@RequestBody User user) {
         if (userService.userExists(user.getUsername())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Username is already taken!"));
+            throw new UsernameAlreadyExistsException(user.getUsername());
         } else if (userService.emailExists(user.getEmail())) {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Email is already taken!"));
+            throw new EmailAlreadyExistsException(user.getEmail());
         } else {
             String encodedPassword = userService.encodePassword(user.getPassword());
             user.setPassword(encodedPassword);
-            userService.addAuthority(user.getUsername(), "ROLE_USER");
-            String newUsername = userService.createUser(user);
+            User authorizedUser = userService.addAuthority(user, "ROLE_USER");
+            String newUsername = userService.createUser(authorizedUser);
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
                     .buildAndExpand(newUsername).toUri();

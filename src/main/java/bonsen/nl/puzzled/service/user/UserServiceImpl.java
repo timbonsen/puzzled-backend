@@ -1,13 +1,8 @@
 package bonsen.nl.puzzled.service.user;
 
-import bonsen.nl.puzzled.exceptions.AddressNotFoundException;
-import bonsen.nl.puzzled.exceptions.PuzzleNotFoundException;
-import bonsen.nl.puzzled.exceptions.RecordNotFoundException;
-import bonsen.nl.puzzled.exceptions.UsernameNotFoundException;
+import bonsen.nl.puzzled.exceptions.*;
 import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
-import bonsen.nl.puzzled.model.authority.AuthorityKey;
-import bonsen.nl.puzzled.model.image.Image;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.repository.AddressRepository;
@@ -15,7 +10,6 @@ import bonsen.nl.puzzled.repository.AuthorityRepository;
 import bonsen.nl.puzzled.repository.PuzzleRepository;
 import bonsen.nl.puzzled.repository.UserRepository;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,15 +40,19 @@ public class UserServiceImpl implements UserService {
     public Set<String> getUsers() {
         Collection<User> allUsers = userRepository.findAll();
         Set<String> allUsernames = new HashSet<>();
-        for (User user:allUsers) {
+        for (User user : allUsers) {
             allUsernames.add(user.getUsername());
         }
         return allUsernames;
     }
 
     @Override
-    public User getUser(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+    public User getUser(String username) {
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            return user;
+        }
+        throw new UsernameNotFoundException(username);
     }
 
     @Override
@@ -80,8 +78,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(String username) {
-        userRepository.deleteById(username);
-        return !userRepository.existsById(username);
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            for (Puzzle puzzle: user.getPuzzles()) {
+                puzzleRepository.deleteById(puzzle.getId());
+            }
+            userRepository.deleteById(username);
+            return !userRepository.existsById(username);
+        }
+        throw new UsernameNotFoundException(username);
     }
 
     @Override
@@ -109,16 +114,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addAuthority(String username, String authorityRole) {
-        User user = userRepository.findById(username).orElse(null);
+    public User addAuthority(User user, String authority) {
         if (user != null) {
-            Authority newAuthority = new Authority(username, authorityRole);
+            Authority newAuthority = new Authority(user.getUsername(), authority);
             authorityRepository.save(newAuthority);
             user.addAuthority(newAuthority);
-            userRepository.save(user);
-            return true;
+            return user;
         }
-        throw new UsernameNotFoundException(username);
+        throw new BadRequestException();
     }
 
     @Override

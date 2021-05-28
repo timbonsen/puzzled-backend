@@ -4,11 +4,6 @@ import bonsen.nl.puzzled.model.address.Address;
 import bonsen.nl.puzzled.model.authority.Authority;
 import bonsen.nl.puzzled.model.puzzle.Puzzle;
 import bonsen.nl.puzzled.model.user.User;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.Collection;
-import java.util.Optional;
 import java.util.Set;
 
 public interface UserService {
@@ -25,7 +20,7 @@ public interface UserService {
     String encodePassword(String password);
 
     Set<Authority> getAuthorities(String username);
-    boolean addAuthority(String username, String authorityRole);
+    User addAuthority(User user, String authorityRole);
     boolean removeAuthority(String username, String authority);
 
     Address getAddress(String id);
