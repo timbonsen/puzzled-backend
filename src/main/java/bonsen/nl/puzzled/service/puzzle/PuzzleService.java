@@ -11,6 +11,7 @@ public interface PuzzleService {
     boolean setImage(Puzzle puzzle, String imageId);
     boolean updatePuzzle(String id, Puzzle updatedPuzzle);
     boolean deletePuzzle(String id);
+    boolean deletePuzzlesFromUser(String username);
     Collection<Puzzle> getPuzzles();
     Collection<Puzzle> getPuzzlesByCategory(String tag1);
     Collection<Puzzle> getPuzzlesByBrand(String brand);
