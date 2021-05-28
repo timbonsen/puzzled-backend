@@ -41,7 +41,6 @@ public class AddressServiceImplTest {
 
     @Test
     void test_updateAddress() {
-        Mockito.when(addressRepository.existsById(address.getId())).thenReturn(true);
         Mockito.when(addressRepository.findById(address.getId())).thenReturn(java.util.Optional.ofNullable(address));
         Mockito.when(addressRepository.save(address)).thenReturn(address);
 
