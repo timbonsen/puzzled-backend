@@ -34,8 +34,8 @@ public class ExceptionController {
         return ResponseEntity.badRequest().body(exception);
     }
 
-    @ExceptionHandler(value = BadCredentialsException.class)
-    public ResponseEntity<Object> exceptionResponse(BadCredentialsException exception) {
+    @ExceptionHandler(value = WrongPasswordException.class)
+    public ResponseEntity<Object> exceptionResponse(WrongPasswordException exception) {
         return ResponseEntity.badRequest().body(exception);
     }
 

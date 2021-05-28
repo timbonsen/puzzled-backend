@@ -39,11 +39,6 @@ public class AuthenticationController {
     @Autowired
     JwtUtil jwtUtl;
 
-    @GetMapping(value = "/authenticated")
-    public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
-        return ResponseEntity.ok().body(principal);
-    }
-
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
@@ -59,7 +54,7 @@ public class AuthenticationController {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
         }
-        catch (BadCredentialsException ex) {
+        catch (Exception ex) {
             throw new WrongPasswordException();
         }
 
