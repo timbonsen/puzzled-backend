@@ -80,9 +80,6 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUser(String username) {
         User user = userRepository.findById(username).orElse(null);
         if (user != null) {
-            for (Puzzle puzzle: user.getPuzzles()) {
-                puzzleRepository.deleteById(puzzle.getId());
-            }
             userRepository.deleteById(username);
             return !userRepository.existsById(username);
         }
