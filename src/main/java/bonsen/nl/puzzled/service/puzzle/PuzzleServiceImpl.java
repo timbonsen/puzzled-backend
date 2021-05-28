@@ -76,6 +76,18 @@ public class PuzzleServiceImpl implements PuzzleService {
     }
 
     @Override
+    public boolean deletePuzzlesFromUser(String username) {
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            for (Puzzle puzzle : user.getPuzzles()) {
+                puzzleRepository.deleteById(puzzle.getId());
+            }
+            return true;
+        }
+        throw new UsernameNotFoundException(username);
+    }
+
+    @Override
     public Collection<Puzzle> getPuzzles() {
         return puzzleRepository.findAllByIdIsNotNull();
     }
