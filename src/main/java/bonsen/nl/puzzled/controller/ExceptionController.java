@@ -6,8 +6,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@ControllerAdvice
 public class ExceptionController {
+
+    @ExceptionHandler(value = UsernameAlreadyExistsException.class)
+    public ResponseEntity<Object> exceptionResponse(UsernameAlreadyExistsException exception) {
+        return ResponseEntity.badRequest().body(exception);
+    }
+
+    @ExceptionHandler(value = EmailAlreadyExistsException.class)
+    public ResponseEntity<Object> exceptionResponse(EmailAlreadyExistsException exception) {
+        return ResponseEntity.badRequest().body(exception);
+    }
 
     @ExceptionHandler(value = RecordNotFoundException.class)
     public ResponseEntity<Object> exceptionResponse(RecordNotFoundException exception) {
@@ -47,9 +57,10 @@ public class ExceptionController {
     @GetMapping(value = "/exception/{exception-id}")
     public void getSpecificException(@PathVariable("exception-id") String exception) {
         if ("addressNotFound".equals(exception)) {
+            System.out.println("addres exception word aangeroepen");
             throw new AddressNotFoundException("testId");
         } else if ("badCredentials".equals(exception)) {
-            throw new bonsen.nl.puzzled.exceptions.BadCredentialsException();
+            throw new WrongPasswordException();
         } else if ("badRequest".equals(exception)) {
             throw new BadRequestException();
         } else if ("emptyField".equals(exception)) {

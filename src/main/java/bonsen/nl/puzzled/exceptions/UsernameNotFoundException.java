@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UsernameNotFoundException extends RuntimeException {
 
     public UsernameNotFoundException(String username) {
-        super("Cannot find user " + username);
+        super("Er is geen gebruiker geregistreerd met gebruikersnaam: " + username);
     }
-
 }
