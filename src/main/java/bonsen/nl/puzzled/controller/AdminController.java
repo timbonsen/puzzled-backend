@@ -1,6 +1,7 @@
 package bonsen.nl.puzzled.controller;
 
 import bonsen.nl.puzzled.exceptions.BadRequestException;
+import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,8 +33,9 @@ public class AdminController {
     @PostMapping(value = "/{username}/authorities")
     public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
         try {
+            User user = userService.getUser(username);
             String authorityName = (String) fields.get("authority");
-            userService.addAuthority(username, authorityName);
+            userService.addAuthority(user, authorityName);
             return ResponseEntity.ok().build();
         }
         catch (Exception ex) {
