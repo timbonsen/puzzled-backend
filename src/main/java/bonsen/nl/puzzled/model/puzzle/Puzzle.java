@@ -80,15 +80,9 @@ public class Puzzle {
     public int getNumberOfPieces() {
         return numberOfPieces;
     }
-    public void setNumberOfPieces(int numberOfPieces) {
-        this.numberOfPieces = numberOfPieces;
-    }
 
     public String getPuzzleBrand() {
         return puzzleBrand;
-    }
-    public void setPuzzleBrand(String puzzleBrand) {
-        this.puzzleBrand = puzzleBrand;
     }
 
     public double getWidth() {
