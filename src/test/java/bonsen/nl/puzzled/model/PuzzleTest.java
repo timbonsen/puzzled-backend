@@ -94,22 +94,6 @@ public class PuzzleTest {
     }
 
     @Test
-    void testSetNumberOfPieces() {
-        int expectedNumberOfPieces = 1000;
-        this.puzzle.setNumberOfPieces(1000);
-        int actualNumberOfPieces = this.puzzle.getNumberOfPieces();
-        assertEquals(expectedNumberOfPieces, actualNumberOfPieces);
-    }
-
-    @Test
-    void testSetPuzzleBrand() {
-        String expectedPuzzleBrand = "Jumbo";
-        this.puzzle.setPuzzleBrand("Jumbo");
-        String actualPuzzleBrand = this.puzzle.getPuzzleBrand();
-        assertEquals(expectedPuzzleBrand, actualPuzzleBrand);
-    }
-
-    @Test
     void testSetReserved() {
         this.puzzle.setReserved(true);
         assertTrue(this.puzzle.isReserved());
