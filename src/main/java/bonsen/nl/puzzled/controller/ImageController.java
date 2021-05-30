@@ -35,7 +35,7 @@ public class ImageController {
         }
     }
 
-    @GetMapping(value = "/puzzles/image/{image-id}")
+    @GetMapping(value = "/puzzles/{image-id}")
     public ResponseEntity<Object> getImage(@PathVariable("image-id") String id) {
         Image requestedImage = imageService.getImage(id);
         return ResponseEntity.ok()
