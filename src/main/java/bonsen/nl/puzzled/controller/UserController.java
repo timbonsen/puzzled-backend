@@ -8,7 +8,6 @@ import bonsen.nl.puzzled.model.user.User;
 import bonsen.nl.puzzled.service.address.AddressService;
 import bonsen.nl.puzzled.service.puzzle.PuzzleService;
 import bonsen.nl.puzzled.service.user.UserService;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,11 +49,6 @@ public class UserController {
         puzzleService.deletePuzzlesFromUser(username);
         userService.deleteUser(username);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping(value = "/{username}/authorities")
-    public ResponseEntity<Object> getUserAuthorities(@PathVariable("username") String username) {
-        return ResponseEntity.ok().body(userService.getAuthorities(username));
     }
 
     @PostMapping(value = "/{username}/address")
@@ -112,14 +106,5 @@ public class UserController {
                 .buildAndExpand(newPuzzleId).toUri();
 
         return ResponseEntity.created(location).body(newPuzzleId);
-    }
-
-    @DeleteMapping(value = "/{username}/delete-puzzle")
-    public ResponseEntity<Object> removePuzzle(
-            @PathVariable("username") String username,
-            @RequestBody String puzzleId) {
-        userService.removePuzzle(username, puzzleId);
-
-        return ResponseEntity.noContent().build();
     }
 }
